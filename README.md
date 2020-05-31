@@ -179,3 +179,9 @@ After all this, we should update skaffold config to enable build process inside 
    Like before, we trick localhost with ticketing.dev, now we have to write the ip address of the load balancer that google cloud creted for us. In google cloud developer - networking - network services - watch the load balancer. Click there and you will be redirect to that load balancer page with its characteristics
    Open hosts file and instead of 127.0.0.1 ticketing.dev, you should do ip-in-googlecloud ticketing.dev
 5. Restart skaffold
+
+## Errors
+
+### express-validator
+
+Validates with a specific-library syntax what we tell it to validate and attach errors in the request, where validationResult() will take the errors from
