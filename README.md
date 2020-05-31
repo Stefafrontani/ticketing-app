@@ -197,3 +197,148 @@ Errors:
 - etc
 
 We need to send always the SAME type of response. Always. Unify all those errors repsonses.
+
+### Error handling - The solution
+
+We must have a consistently structured response from all servers, no matter what went wrong.
+-> Write an error handling middleware to process errors, give them a consistent structure, and send back to the browser
+
+A billion things can go wrong, not just validation of inputs to a request handler. Each of these need to be handled consistently
+-> Make sure we capture all possible erros using Express's erros handling mechanism (call the 'next' function!)
+
+Middlewares in express
+
+Each time we pass a middlewre to express
+errorHandler (path: auth/middlewares/error-handler.ts ) in this case
+
+```
+app.use(errorHandler)
+const errorHandler = (error, req, res, next) => {  }
+
+```
+
+Express will parse that funciton and count the amount of args it receives.
+Whenever we pass 4 args, express assumes that that same function is in charge of handling errors. This is the reason why when an error occur, this function gets called - this is made by express.
+Errors can occure in sync code or async code.
+
+From doc: https://expressjs.com/en/guide/error-handling.html
+
+Sync code
+
+```
+Throwing an error inside a route, will get that error handler middleware function to be called
+app.get('/', function (req, res) {
+  throw new Error('BROKEN') // Express will catch this on its own.
+})
+```
+
+Async code
+In case we have async code, we should call next - the middleware function by yourself i.e.:
+
+```
+app.get('/', function (req, res, next) {
+  fs.readFile('/file-does-not-exist', function (err, data) {
+    if (err) {
+      next(err) // Pass errors to Express.
+    } else {
+      res.send(data)
+    }
+  })
+})
+```
+
+All this is to centralize the error creating process and generate errors with the same strucuture, nomatter where the error was thrown and what thrown that error - a db connection, a validation in the req.body, etc.
+
+Inside that middleware errorHandler, we have to define the structure of the error we are going to send.
+The structure define for this project is this:
+
+```
+{
+   errors: [
+      {
+         message: string,
+         field: string
+      }
+   ]
+}
+```
+
+In order to do this, we would add to the Error build-in object, some field like reasons:
+
+```
+const error = new Error('String that defines type of error')
+error.reasons = { errors: [{  }] } // TS will complain that .reasons does not exist in Error object.
+```
+
+But we can not do this in typescript, we should create some errors based on the Error itself in order to add some properties to it, usefull to add information we like and standarize the structure off ALL erros inside our app
+Those errors are in:
+./errors/request-validaton-error.ts
+./errors/database-connection-error.ts
+
+These errors defines extra properties of their own:
+errors: ValidationError[]
+reason: string; // Hardcoded to 'Error connecting to a database'
+
+Both errors should have methods that will be used to normalize the structure of those errors: will receive whatever properties needed and create the structure mentioned several times now:
+{ errors: [ { ... } ] }
+This is done so the errorHandler function does not know any of each specific Error structure, and only call that serializeErrors. Besides a status code is deifne each error.
+
+We then use TS to check if the strcture return by serializeError is correct and that every Error use in errorHandler (RequestValidation or DatabseConnection) are always returning the status code as well.
+This is done by:
+
+Option #1
+
+```
+interface CustomError { statusCode: number; serializeErrors(): { message: string; field?: string }[] }
+```
+
+And in each error, implement that interface:
+
+```
+class RequestValidationError extends Error implements CustomError {}
+```
+
+Option #2
+In order to simplify the if statementes inside the error hanlder
+
+```
+  if (err instanceof RequestValidationError) {
+    return res.status(err.statusCode).send({ errors: err.serializeErrors() });
+  }
+  if (err instanceof DatabaseConnectionError) {
+    return res.status(err.statusCode).send({ errors: err.serializeErrors() });
+  }
+```
+
+We are going to have an abstract Class call CustomError abstract Class
+Abstract Class:
+
+- Can not be instantiated
+- Used to set up requirements for subclasses
+- Do create a Class when translated to JS!!! interfaace do not creat enothing when compile to plain JS. And because of this we can use instanceof checks!
+
+We then create that CustomError abstract class to rely on that the structure of the errors among all the application will be consistent
+
+Instead of asking, in error handler, for every Error : if err isntance off CustomError2, if err instance of CustomError2, we only ask if that err is an isntance off the generic CustomError
+
+Async code - cathing errors
+
+When we have async code, we can not throw an errors and expect express to catch it.
+
+```
+app.all('*', async (req, res) => {
+   throw new NotFoundError()); // Way of catching (\*sync error)
+});
+```
+
+That code above is never going to be catch by express. Instead we should use the next function express provide in the callback function and send the NotFoundError as an argument.
+
+In code:
+
+```
+app.all('*', async (req, res, next) => {
+   next(new NotFoundError()));
+});
+```
+
+In order to mantain the first way of sending errors, we use the library express-async-errors in order to make express to be able to manage the async errors with the syntax above (\*sync error)
