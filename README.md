@@ -185,3 +185,15 @@ After all this, we should update skaffold config to enable build process inside 
 ### express-validator
 
 Validates with a specific-library syntax what we tell it to validate and attach errors in the request, where validationResult() will take the errors from
+
+### Problem in microservices apps
+
+In a multi-microservices app, every service can be build with a specific language - ROR, Java Spring, Express + express-validator -. Because of this, the errors each services might send in the response might be VERY different.
+This is a huge problem on the client side because it will need to know how to process every type of error
+Errors:
+
+- Express: { msg: string; paran: string }
+- ROR: { status: number; message: string }
+- etc
+
+We need to send always the SAME type of response. Always. Unify all those errors repsonses.
