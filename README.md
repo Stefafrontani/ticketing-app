@@ -119,3 +119,63 @@ When trying to access ticketing.dev/api/users/currentuser we can see a `Your con
 NGINX is a web server that will use an HTTPS connection. Unfortunately by default, it will use a self sign certificate and chrome does not trust those servers that use that type of servers
 
 That webserver will use a config to disable a way to avoid that `Your conenction is not private` problem. The solution: type `thisisunsafe` whenever while on the ticket.dev url.
+
+### Leveraging a cloud environment for develop
+
+1. Make an account in `console.cloud.google`
+2. Go to `kubernetes engine`
+3. Click `Create cluster`
+4. Change the default config:
+   . cluster name
+   . location type (zonal)
+   . kubernetes version (1.15 minumun used in course)
+   . default pool
+   . nodes ( Quantity - 3 AND Machine type : g1-small (1.7 gb))
+
+By default, when we run `kubectl`, it uses somehting called context.
+This context could be think of different connecitons settings. authroizations credentials, api adresses, etc. It tells kubectl how to connect to our local cluster - This is its default behaviour
+
+We should add another context to tell kubectl to conenct to google cloud cluster
+
+A way to configure different cluster for klusterctl is to use google cloud SDK in our macchine. It will manage this diffrent context for kubernetes.
+After installing it run
+`$ gcloud auth login` // You should login with the same account of the project created in google cloud developer
+`$ gloud init` // promt to use 2 configuration: Re-initialize with some default(1) or create new config (2). Select 1
+Add account used to login before
+Select project. Select from list
+Configure default Compute Region and Zone (we selected one zone when creating the google cloud cluster). Select from list
+
+We have to decide whether if we want to run or no docker locally still
+NO ?
+
+1. Close docker desktop
+2. run `$ gcloud components install kubectl`
+3. run `$ gcloud container clusters get-credentials {clusterName}`
+
+YES ? (more probable)
+
+1. run `$ gcloud container clusters get-credentials {clusterName}`
+
+The clusterName is the one on the google cloud
+
+TO see if it works, you can go to docker icon, deploy the kubernetes preference and you should see 2 context - desktop-docker and weird-name-cluster-google-cloud
+
+After all this, we should update skaffold config to enable build process inside google cloud build - when an unsync change is made (out of src/\*_/_.js - sync property). So we have to
+
+1. Enable google cloud build
+2. Update the skaffold.yaml to use google cloud build
+   build:
+   <!--    local:
+      push: false -->
+   googleCloudBuild:
+   projectId: pacific-destiny-whatever-id-googlecloud-gave-to-oyr-project
+   ...
+   artifacts: - image: us.gcr.io/projectId/auth // specify the image name that gcloud will give: its structure >-
+   Then in auth-srv.yaml modify image from stefanofrontani/auth to us.gcr.io/projectId/auth
+3. setup ingress-nginx on our google cloud cluster kubernetes.github.io/ingress-nginx
+   Select from kubernetes menu in docker for desktop to the cluster on the google cloud
+   Apply the mandatory command for NGINX and 1 additional command GCE GKE
+4. Update our hosts file again to point to the remote cluster - no more localmachine
+   Like before, we trick localhost with ticketing.dev, now we have to write the ip address of the load balancer that google cloud creted for us. In google cloud developer - networking - network services - watch the load balancer. Click there and you will be redirect to that load balancer page with its characteristics
+   Open hosts file and instead of 127.0.0.1 ticketing.dev, you should do ip-in-googlecloud ticketing.dev
+5. Restart skaffold
