@@ -342,3 +342,43 @@ app.all('*', async (req, res, next) => {
 ```
 
 In order to mantain the first way of sending errors, we use the library express-async-errors in order to make express to be able to manage the async errors with the syntax above (\*sync error)
+
+### Reminder - auth-mongo-depl.yaml
+
+MongoDB is just like any other thing that we want to run inside our kubernetes cluster.
+We are going to be running mongoDB inside of a pod. We usually do not create pod directly, we use deployment, which will create pods for us. And to communicate to this mongoDB instance pod, we will have a clusterIP service as well.
+
+// Deployment
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+name: auth-mongo-depl
+---spec:
+---replicas: 1
+---selector:
+------matchLabels:
+---------app: auth-mongo
+---template:
+------metadata: // How the deplyoment finds the pods that it actually creates
+---------labels:
+------------app: auth-mongo
+---spec: // This is a label that gets apply to the pod
+------containers:
+---------\- name: auth-mongo
+--------- image: mongo
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+---name: auth-mongo-srv
+spec:
+---selector: // Tell the service which pod is is going to govern access to - Match the one above
+------app: auth-mongo
+---ports:
+------- name: db
+---------protocol: TCP
+---------port: 27017
+---------targetPort: 27017
