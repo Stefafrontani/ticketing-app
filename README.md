@@ -401,3 +401,32 @@ spec:
 2. After we create a user, then we log a user and see that that user has more properties that we passed in before:
    Given the shape: new User({ email: 'test@test.com', password: 'passTest' })
    console.log(user) // Output { email, password, createdAt, updatedAt }
+
+### Solutions to mongoose-TS compatibility issues
+
+The goal is to have method inside our User model that allows as o build a user like:
+User.build()
+The problem is that TS does not recognize a build() method inside our model. For this, we create another interface called UserModel, which extends from the mongoose model type
+
+```
+// The any is for TS not to complain
+interface UserModel extends mongoose.Model<any> {
+   build: (attrs: UserAttrs) => any;
+}
+```
+
+We then create an interface defining what props should accept our User model build function
+
+```
+interface UserAttrs {
+   email: string;
+   password: string;
+}
+```
+
+In the end, when we create the user Model, we do it giving the UserModel as an TS argument type to mongoose.model.
+The any type in there is for TS not to complain
+
+```
+const User = mongoose.model<any, UserModel>("User", userSchema);
+```
