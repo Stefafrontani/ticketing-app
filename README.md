@@ -343,7 +343,7 @@ app.all('*', async (req, res, next) => {
 
 In order to mantain the first way of sending errors, we use the library express-async-errors in order to make express to be able to manage the async errors with the syntax above (\*sync error)
 
-### Reminder - auth-mongo-depl.yaml
+## Reminder - auth-mongo-depl.yaml
 
 MongoDB is just like any other thing that we want to run inside our kubernetes cluster.
 We are going to be running mongoDB inside of a pod. We usually do not create pod directly, we use deployment, which will create pods for us. And to communicate to this mongoDB instance pod, we will have a clusterIP service as well.
@@ -382,3 +382,22 @@ spec:
 ---------protocol: TCP
 ---------port: 27017
 ---------targetPort: 27017
+
+## Mongoose
+
+2 important things over here
+
+1. Mongoose User Model
+   Represents the entire collection of the data collection (Users collection, for example)
+2. Mongoose User Document
+   Each piece of the collection - called a document (1 doc == 1 user, for example)
+
+### Issues with typescript
+
+1. Creating a new Document
+   Given the shape: new User({ email: 'test@test.com', password: 'passTest' })
+   Whenever we pass properties, TS wants to understand props passing in and make sure we are sending the correct types of data. Check the arguments pass to the funcion of User.
+   Mongoose does not allow this to TS. TS will nos get errors of typo and, for isntance, we can send passeod instead of password and TS will not notice this
+2. After we create a user, then we log a user and see that that user has more properties that we passed in before:
+   Given the shape: new User({ email: 'test@test.com', password: 'passTest' })
+   console.log(user) // Output { email, password, createdAt, updatedAt }
