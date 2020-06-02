@@ -430,3 +430,27 @@ The any type in there is for TS not to complain
 ```
 const User = mongoose.model<any, UserModel>("User", userSchema);
 ```
+
+### Angle brackets - (141)
+
+Functions for types. Long story short.
+In JS with pass arguments to a function in order to get some behaviour.
+In TS, some types could receive type arguments to create a specific type
+
+```
+./users.ts
+const User = mongoose.model<UserDoc, UserModel>("User", userSchema);
+```
+
+The above line can be inspect more in depth if we go to the ts definition of model:
+
+```
+export function model<T extends Document, U extends Model<T>>(
+   name: string,
+   schema?: Schema,
+   collection?: string,
+   skipInit?: boolean
+): U;
+```
+
+That U is the UserModel, so the Model function will return a UserModel type value
