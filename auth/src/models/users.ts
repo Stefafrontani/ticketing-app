@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Password } from "../services/password";
 
 // An interface that describes the properties
 // that are required to create a new user
@@ -30,6 +31,20 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+});
+
+userSchema.pre("save", async function (done) {
+  // Check if we modified the user password
+  // We might retrieving the user from the DB and then saving it back to th eDB
+  // i.e.: modifying - edit - the email on the user
+  // Only hash the password if the user's password was modified
+  // Mongoose considered the password to be modified also when it is created
+  if (this.isModified("password")) {
+    const hashed = await Password.toHash(this.get("password"));
+    this.set("password", hashed);
+  }
+
+  done();
 });
 
 userSchema.statics.build = (attrs: UserAttrs) => {
