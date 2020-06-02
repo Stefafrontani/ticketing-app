@@ -485,3 +485,40 @@ hashedPassword.salt
 
 The salt is a random string attached to a hashed password that protects that hased password from a Rainbow Table Attack
 In this way, we end up having a unique hashed password for every user: while the process of hashing the password is the same for every user, with the unique salt part attached to that hashed password makes the password-encryption process unique for each password
+
+## Authentication Strategies and Options
+
+The issues about authentication in microservices world is that almost every service should know whether a user is signin and has a valid session.
+
+The approaches:
+
+Fundamental solution #1
+
+Make a sync request between services - the one that need the user validation authenticated and the auth service.
+
+The props:
+
+- Change to auth service are inmediately reflected
+  The cons:
+- Dependencies between services. If auth service go down, the entire app starts to be useless
+
+Fundamental solution #2
+
+Each service know how to authenticate a user
+
+The pros:
+
+- No dependencies between services.
+  The cons:
+- All services (most of them) should have that code neccesary to authenticate the user.
+- The most important: the example of get a user banned.
+  i.e.: ASsume user tries to purchase a ticket. He can, the service of purchasing a ticket is aware of authenticating the user. But what happend if that same user gets banned in some point on the future? That logic would be take care by the auth service, updating the access that user has { username: 'Bad person', isBanned: true }. The services that per se authenticate the users, would not know this change. They wont know if that user is banned. The JWT/Cookie that the user had to authenticate (Remember: which is provided by the service used and not auth service) is still VALID! PROBLEM
+
+Handle expiration time for the JWT. When the JWT will have its age too so when the user made a requests, inside the service where the request its been made, that service should ask whether that JWT is expired or not. If it is expired, ways of procceding:
+
+1. Sync request to auth service to refresh token
+2. Ask the client to get the token (this means, redirect to login and login)
+3. Expiratiom + cache + event bus
+   Now, assume that the expiraiton is 15 minutes
+   How do we deal with that banned user in that window of 15 minutes? Maybe the user was banned before the JWT expired.FOr this, we could make an async betwenn services implementation. An event bus implementation.
+   We can create an event whenever we want to update that JWT (for example is a user is banned, create an event called: { type: 'UserBanned', useId: 'id' }). This event goes to each of our services and inside them we can persist the data inside a cache, and give it life for the same period of time that the jwt will expire.
