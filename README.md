@@ -454,3 +454,34 @@ export function model<T extends Document, U extends Model<T>>(
 ```
 
 That U is the UserModel, so the Model function will return a UserModel type value
+
+## Password hashing-encryption
+
+### Why?
+
+In case some maliscious person get access to our DB collection and reads password and email as plain text.
+Steps: Signup
+
+1. Hash the password for the password used by the user.
+2. Take that hash and send to DB
+
+If anyone access our databse it would not be as bad as if they read passwords.
+
+Steps: Signin
+
+1. Hash password passed
+2. Find user in DB
+3. Coompare hash password stored in that user document with the password hashed provided by the user.
+4. Give / Deny access
+
+### scrypt
+
+Awesome for encryption, party of node as module called 'crypto'.
+It's callback based. Here enters promisify. Enables us to create promised-bsaed code, which get on well with async await we are using.
+
+For hashing:
+In reality, the hashed password is the part before the salt. The stored password consists of 2-parts
+hashedPassword.salt
+
+The salt is a random string attached to a hashed password that protects that hased password from a Rainbow Table Attack
+In this way, we end up having a unique hashed password for every user: while the process of hashing the password is the same for every user, with the unique salt part attached to that hashed password makes the password-encryption process unique for each password
