@@ -41,7 +41,7 @@ router.post(
         id: user._id,
         email: user.email,
       },
-      "asdf"
+      process.env.JWT_KEY! // TS will complain that env.JWT_KEY can have a value of undefined. We have to check this before this line of code. We do it in the start funciton on the index.ts file because if we do it here, we would come up with this error only when trying to access this route, BAD. The process env variables is needed to be checked right before initialization of the app.
     );
 
     // Store in on session object
