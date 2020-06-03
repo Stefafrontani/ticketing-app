@@ -22,16 +22,28 @@ interface UserDoc extends mongoose.Document {
   // updateAt: string; // Add if we would like to access property in user. See (*access to user.updatedAt)
 }
 
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String, // Nothing to do with TS
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String, // Nothing to do with TS
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.password;
+        delete ret.__v;
+      },
+    },
+  }
+);
 
 userSchema.pre("save", async function (done) {
   // Check if we modified the user password

@@ -657,3 +657,18 @@ kubectl delete secret secretName "access-token" deleted
 When you create a secret with a specific key and you try to return a different key in the .yaml file, kubernetes will not deploy that thing that used the secret key that does not exist.
 To debug the container/pod that did not run, run:
 kubectl describe pod {namePod}
+
+## toJSON override behaiour
+
+When JSON.stringify is called, JS will try to invoke a toJSON method inside the objct trying to be converted to JSON
+
+```
+const person = { name: 'alex' };
+JSON.stringify(person) // Output: "{"name":"alex" }"
+
+const personTwo = { name: 'alex', toJSON() { return 1 } };
+JSON.stringify(personTwo) // Output: 1 - Now 1 would be our JSON representation of out personTwo object
+```
+
+In a similar way, we can change the behaviour of how mongoose convert documents and give us those return values from the DB. From documents to JSON.
+Passing down another argument to mongoose.schema, like in code.
