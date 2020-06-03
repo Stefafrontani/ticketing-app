@@ -587,3 +587,11 @@ As the client next js send everything processed, will also have to fetch some da
 THIS IS A PROBLEM, because when we write down the url google.com, google has no ability to run any js code before sending the html file. It first sends the html file, and then will reach out for those JS sources. We can not customize that header request, that ifrst request. We can not intercept that request and write an autorization header and neither a body. We can only set a cookie to say to the server what user we are. This is the approach we will use, we will save the JWT inside the cookie.
 
 Summing up: as soon as we make aGET request to ticketing.dev, we should have the user authenticate, and the JWT we decide to use as an authentication method can not be placed inside that first request. That request can not run any JS code. The only way to send the JWT is to send it inside cookie.
+
+## Cookies and Encryption
+
+We are going to use cookie-session as a library.
+This library enables encryption.
+
+Cookies are difficult to handle among services.
+When we decide to encrypt cookies and use multiple services, it can get tricky the unencryption of those cookies. This is the reason that we are not going to encrypt the cookie as the JWT will naturally will prevent from manipulation, JWT are tamper resistant (resistance to tampering === intentional malfunction or sabotage).
