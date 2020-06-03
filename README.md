@@ -562,3 +562,28 @@ We should have only a Store machism to only store the auth mechanism we select. 
 JWT.
 More in favor for JWT: it has expiration
 Cookie also "has" an expiration date, but is is managed by the browser. A user could easily copy the cookie and used it at some point ahead of time, no matter the expiration time.
+
+## App + Auth Flow
+
+Browser <--> Normal React app
+-> GET Request ticketing.dev ->
+<- Response HTML files + script tags <-
+
+-> GET Request JS files ->
+<- Response JS files <-
+
+Browser <--> Orders Service (express + express-validator)
+-> Request Some data ->
+<- Response Orders Data <-
+
+The sonnest we need to authenticate users, is when the users start requesting some data. In this case, the orders service now.
+
+In this app, we have:
+
+Browser <- -> client (next js) <--> Services
+We request ticketing.dev to some backend server (nextjs), will build the html for our app with all the content.
+That backend sends the response, and the browser client won't need to ask for js files anymore.
+As the client next js send everything processed, will also have to fetch some data, this incudes whatever services and as it should request data, it also will need to authenticate the user.
+THIS IS A PROBLEM, because when we write down the url google.com, google has no ability to run any js code before sending the html file. It first sends the html file, and then will reach out for those JS sources. We can not customize that header request, that ifrst request. We can not intercept that request and write an autorization header and neither a body. We can only set a cookie to say to the server what user we are. This is the approach we will use, we will save the JWT inside the cookie.
+
+Summing up: as soon as we make aGET request to ticketing.dev, we should have the user authenticate, and the JWT we decide to use as an authentication method can not be placed inside that first request. That request can not run any JS code. The only way to send the JWT is to send it inside cookie.
