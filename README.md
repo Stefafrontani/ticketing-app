@@ -653,3 +653,7 @@ The reason for this is to not have a config file listing our secrets values alth
 
 To delete run:
 kubectl delete secret secretName "access-token" deleted
+
+When you create a secret with a specific key and you try to return a different key in the .yaml file, kubernetes will not deploy that thing that used the secret key that does not exist.
+To debug the container/pod that did not run, run:
+kubectl describe pod {namePod}
