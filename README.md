@@ -609,3 +609,22 @@ Object.defineProperty(this, 'isNew', {
    value: !obj
 })
 ```
+
+## Cookie / JWT decoding
+
+After setting the cookie inside the request like in previous request, we can see (in postman for example) the process using postman for example, making a post request to https://ticketing.dev/api/users/signup
+The request will be something like this :
+In cookie tab
+value: eyJpc0NoYW5nZWQiOnRydWUsImlzUG9wdWxhdGVkIjp0cnVlLCJqd3QiOiJleUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKcFpDSTZJalZsWkRkbU5XWmxPV1JqTjJObE1ERXhaV016TXpFeFlTSXNJbVZ0WVdsc0lqb2lkR1Z6ZERWQWRHVnpkQzVqYjIwaUxDSnBZWFFpT2pFMU9URXlNVEUxTVRoOS5kNTZDcGdiSXZNT2ZGdDFrUG1ndzBRMnlUTjZWRXlHcGtsMFlXMTBTcVhzIn0
+
+That session object created in the request, was turn into json and then hash-64 encoded.
+To decode it place that cookie inside the url
+
+The return value is the json object passed to the sign objectfunction
+{"isChanged":true,"isPopulated":true,"jwt":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZDdmNWZlOWRjN2NlMDExZWMzMzExYSIsImVtYWlsIjoidGVzdDVAdGVzdC5jb20iLCJpYXQiOjE1OTEyMTE1MTh9.d56CpgbIvMOfFt1kPmgw0Q2yTN6VEyGpkl0YW10SqXs"}
+
+There is our token:
+to decode the token, go to jwt.io, paste there jwt and the secret key
+The tool that let you play with jwt and decoding them, does not require that key to show the payload, in our case the id and email of the user. The key is meant to be a secure passage to assure ourselves that the sign of the jwt is correct and no user messed around with it. It only checks if the SIGNATURE of the JWT is valid, it DOES NOT hide the payload. This is why is not a good idea to put sensitive information in there.
+
+IT is COMPLETELY neccesary to extract that key, store it in a secure way and share it among all other services because they will need it to verified the signature of the token when they received each request.

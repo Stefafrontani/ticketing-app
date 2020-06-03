@@ -51,7 +51,7 @@ router.post(
       isPopulated: true,
       jwt: userJwt,
     };
-
+    // (*Cookie decoding)
     res.status(201).send(user);
   }
 );
