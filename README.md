@@ -628,3 +628,28 @@ to decode the token, go to jwt.io, paste there jwt and the secret key
 The tool that let you play with jwt and decoding them, does not require that key to show the payload, in our case the id and email of the user. The key is meant to be a secure passage to assure ourselves that the sign of the jwt is correct and no user messed around with it. It only checks if the SIGNATURE of the JWT is valid, it DOES NOT hide the payload. This is why is not a good idea to put sensitive information in there.
 
 IT is COMPLETELY neccesary to extract that key, store it in a secure way and share it among all other services because they will need it to verified the signature of the token when they received each request.
+
+## Secret - Sharing confidential information among our cluster
+
+Inside our cluster, we have a node, which have all of our pods. Those pods require to know which is the secret key. For this, we will create another object inside the cluster called a secret, that is an object, just like everything in kubernetes kubernetes. A service is an object, a deployment is an object, etc.
+Inside a secret we can store key value pairs of information.
+We could save something like:
+JWT_Key = 'asdf';
+
+This will exposed as an environment variables. The environment variables are inside the containers, not inside the pods itself but whatever... the idea is that we could access those env variables from our services.
+
+### Creating a Secret
+
+In order to declaring a secret there are two approaches:
+
+Declarative:
+AS we have done with every other object, created with a config file .yaml
+
+Imperative
+Run
+\$ kubectl create secret generic jwt-secret --from-literal=jwt=asdf
+
+The reason for this is to not have a config file listing our secrets values although it can be done with a secure approach and give those values with local environment variables.
+
+To delete run:
+kubectl delete secret secretName "access-token" deleted
