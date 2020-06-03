@@ -595,3 +595,17 @@ This library enables encryption.
 
 Cookies are difficult to handle among services.
 When we decide to encrypt cookies and use multiple services, it can get tricky the unencryption of those cookies. This is the reason that we are not going to encrypt the cookie as the JWT will naturally will prevent from manipulation, JWT are tamper resistant (resistance to tampering === intentional malfunction or sabotage).
+
+## Fix cookie-session library
+
+Update code inside the file in order to make property isNew writable:
+
+.\auth\node_modules\cookie-session\index.js,
+
+```
+line 141
+Object.defineProperty(this, 'isNew', {
+   writable: true,
+   value: !obj
+})
+```
