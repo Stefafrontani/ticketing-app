@@ -45,10 +45,8 @@ router.post(
     );
 
     // Store in on session object
+    // @ts-ignore // The problem i want to ignore is this: The Session object asked for 3 properties (isNew, isPopulated, isChanged). The issue in here is that the isNew property is created as a writable: false property so it sent an error whever trying to define it! DAMN
     req.session = {
-      isChanged: true,
-      isNew: true,
-      isPopulated: true,
       jwt: userJwt,
     };
     // (*Cookie decoding)

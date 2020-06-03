@@ -672,3 +672,8 @@ JSON.stringify(personTwo) // Output: 1 - Now 1 would be our JSON representation 
 
 In a similar way, we can change the behaviour of how mongoose convert documents and give us those return values from the DB. From documents to JSON.
 Passing down another argument to mongoose.schema, like in code.
+
+## ts-ignore
+
+To ignore ts errors, write // @ts-ignore above the line you want to be ignored.
+See file ./ticketing-app/auth/src/routes/signup.ts
