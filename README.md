@@ -522,3 +522,43 @@ Handle expiration time for the JWT. When the JWT will have its age too so when t
    Now, assume that the expiraiton is 15 minutes
    How do we deal with that banned user in that window of 15 minutes? Maybe the user was banned before the JWT expired.FOr this, we could make an async betwenn services implementation. An event bus implementation.
    We can create an event whenever we want to update that JWT (for example is a user is banned, create an event called: { type: 'UserBanned', useId: 'id' }). This event goes to each of our services and inside them we can persist the data inside a cache, and give it life for the same period of time that the jwt will expire.
+
+## Cookies vs JWT
+
+### Cookies
+
+You put your credentials, they go to the server and if it validate your person, it will create a session id as a cookie. That session id is randomly generated and is not readable by other webs.
+If you logout the session id is delete from the server and the browser and as long you interact with that page and are active (assuming it does not expire), the server will mantain that session id.
+The cookie is only a transport mechanism to transport the sessionId
+
+- Transport mechanism
+- Moves any kind of data between browser and server
+- Automatically managed by the browser
+
+### JWT's
+
+Stored info in the client and sign it. One holding the signature of the token can validate that
+The token is like a randomly generated password. Instead of givin your username or password, you can give the token insted of username or password. The token CONTAINS information about a certain request.
+
+- Authentication/Authorization mechanism
+- Stores any data we want
+- We have to manage it manually
+
+### Requirements on the Auth mechanism on our app:
+
+In this app, we need to store information inside that piece of information (cookie / JWT). Not only the app must say to us "yes, this user is authenticated" but also give us some data about them "yes, he is not banned and can buy tickets"
+
+Not onlt details about a user but only handle authorization info
+
+The auth mechanism also must have sine built-in, super secure way of expiring after a period of time (related when talked about pros and cons of both)
+
+In microservices, the auth mechanism must be easily understood by many languages.
+
+Our app also implies that the auth mecanism should0t require some kind of backing data store on the server.
+We should have only a Store machism to only store the auth mechanism we select. Maybe a service does not have a way to store data (not a mongo DB, sql, redis, nothing so it should need that DB instance to store that auth mechanism)
+
+### So which one?
+
+JWT.
+More in favor for JWT: it has expiration
+Cookie also "has" an expiration date, but is is managed by the browser. A user could easily copy the cookie and used it at some point ahead of time, no matter the expiration time.
