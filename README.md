@@ -677,3 +677,15 @@ Passing down another argument to mongoose.schema, like in code.
 
 To ignore ts errors, write // @ts-ignore above the line you want to be ignored.
 See file ./ticketing-app/auth/src/routes/signup.ts
+
+## Common request validator middleware
+
+The router we are using to define the different routes has the structure of
+
+```
+router.METHOD(path, [callback, ...] callback)
+```
+
+This means it can take as many clalbacks as we want, everytime separating them with a comma or putting all together isndie an array - In the app we do this to put together related-middlewares, for example the express-validator body validators.
+
+When a middleware does not end the request and send a response, we should call next to call the next middleware on the chain.
