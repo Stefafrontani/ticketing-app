@@ -702,3 +702,19 @@ So in this router, we have to check if the user has a req.session.jwt.
 Below the send button there is a cookir tab. Open it and remove the cookie.
 Whenever a request is sent through a domain (ticketing.dev) and a cookie is set, postman will keep that cookie to whatever request we do from the same domain.
 So if a cookie was set when POST - api/users/signin, when we send a GET - api/users/currentUser will have that cookie
+
+## Augmenting Type Definitions
+
+When we try to add .currentUser prop inside the req object, TS will complain because, as defined inside the namespace express, it does not accept that property. To augment the props on the req object, we call that inside the global module, inside the express namespace, the request interface can have another prop currentUser
+
+```
+declare global {
+  // We tell TS that search in the express module
+  namespace Express {
+    // That interface Request can have currentUser
+    interface Request {
+      currentUser?: UserPayload;
+    }
+  }
+}
+```
