@@ -689,3 +689,16 @@ router.METHOD(path, [callback, ...] callback)
 This means it can take as many clalbacks as we want, everytime separating them with a comma or putting all together isndie an array - In the app we do this to put together related-middlewares, for example the express-validator body validators.
 
 When a middleware does not end the request and send a response, we should call next to call the next middleware on the chain.
+
+## Why currentUser handler?
+
+At some point in time React app must know if whether a user is log in or not in our application. But it wont be able to look directly at the cookie and decide if it contains a valid cookie inside. We make that cookie in a way they can not be accessed with JS code inside the browser.
+This is why the react app must do a request to a router (currentUser) to see if the user is logged in. That request includes a cookie if that user exist. If the user has no cookie, it wont have a cookie.
+
+So in this router, we have to check if the user has a req.session.jwt.
+
+## Cookies in postman
+
+Below the send button there is a cookir tab. Open it and remove the cookie.
+Whenever a request is sent through a domain (ticketing.dev) and a cookie is set, postman will keep that cookie to whatever request we do from the same domain.
+So if a cookie was set when POST - api/users/signin, when we send a GET - api/users/currentUser will have that cookie
