@@ -718,3 +718,38 @@ declare global {
   }
 }
 ```
+
+# 10 - Testing
+
+## Scope of testing
+
+Several scopes
+
+Test a single piece of code in isolation
+Single middleware
+i.e.: requireAuth, a function used as a middleware
+
+How several pieces of code work together
+Request flowing through multiple middlewares to a request handler
+i.e.: requireAuth + signup
+
+How multiple components work together
+AuthService interaction with other modules such as our mongoDB
+i.e.: order service + mongoDB instance
+
+Different services work together
+Use specific server and received that data by other service and process the right way.
+i.e.: orders service + ticketing service
+This should have an environmentin order to make it testable. Not gonna do this
+
+## Testing Goals - on this app
+
+1. We are focusing on testing services in isolation
+   No interaction with other services.
+   i..e: If we signup, that request should be processed the correct way.
+
+2. Tests around models - individual modules (1/4 of above)
+
+3. Emitting and Receiving events. We are going to achieve a "test" between services
+
+The tests are going to be run on local machine. No docker used. This imply that our local environment is capable of running each service. In this case is ok, but we can have many dependencies so it can get a little tricky in bigger projects.
