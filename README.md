@@ -753,3 +753,20 @@ This should have an environmentin order to make it testable. Not gonna do this
 3. Emitting and Receiving events. We are going to achieve a "test" between services
 
 The tests are going to be run on local machine. No docker used. This imply that our local environment is capable of running each service. In this case is ok, but we can have many dependencies so it can get a little tricky in bigger projects.
+
+## Tests tools
+
+Jest - test runner
+Run: \$ npm run test
+This will tell jest to:
+
+- In memory copy of MongoDB
+- Start up our express app
+- Use supertest library to make fake requests to our express app
+- Run assertions to make sure the request did the right thing
+
+The supertest library needs the express app to make request to it.
+Our current setup, inside the idnex.ts file, not only we create the express server, but also other things like listening to a port. In the future we might want to run different tests at the same time, and that will not be possible because both services will be listening to the same port.
+We are going to trust the supertest library behaviour that will take a random port on our computer and make the express app to lsiten to that port, this port is selPected randomly whenever the express app passed to the library is not listening to any port
+We will do a refactor - We will have the index.ts and another app.ts file. The app will create the express app, and will not be listening to any port, index.ts will make that app to listen to a port
+So app.ts will be used inside both files: test files and index.js
