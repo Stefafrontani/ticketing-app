@@ -770,3 +770,16 @@ Our current setup, inside the idnex.ts file, not only we create the express serv
 We are going to trust the supertest library behaviour that will take a random port on our computer and make the express app to lsiten to that port, this port is selPected randomly whenever the express app passed to the library is not listening to any port
 We will do a refactor - We will have the index.ts and another app.ts file. The app will create the express app, and will not be listening to any port, index.ts will make that app to listen to a port
 So app.ts will be used inside both files: test files and index.js
+
+## Testing Dependencies
+
+### mongodb-memory-server
+
+Tihs enables to run run in memory, copy in memoory to test multiple DB at the same time.
+If not we would have the same connection to the same instance in mongoDB to run all the tests
+
+As this library has huge size, we should tell the dockerfile inside the infrastructure directory to not take into account the modules placed in as dev dependencies (jest, supertest, etc) as we wont be running tests with docker
+This is the magic line inside the docker file
+RUN npm install --only=prod
+
+Will not take the dev-dependencies into account
