@@ -783,3 +783,22 @@ This is the magic line inside the docker file
 RUN npm install --only=prod
 
 Will not take the dev-dependencies into account
+
+## Script
+
+jest --watch-all --no-cache
+--watch-all: run tests wheever a file inside directory is changed
+--no-cache: ti fix some issues between ts and jest. Jest does not support ts by nature, so sometimes it does not get its changes perfect.
+jest gets really confused sometimes when changing those TS files
+
+## Jest Configuration
+
+```
+"jest": {
+   "preset": "ts-jest",            // compatibility between jest and ts
+   "testEnvironment": "node",      // Bla.
+   "setupFilesAfterEnv": [         // Take some files when initializing
+      "./src/test/setup.ts"
+   ]
+}
+```
