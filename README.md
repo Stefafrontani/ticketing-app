@@ -802,3 +802,13 @@ jest gets really confused sometimes when changing those TS files
    ]
 }
 ```
+
+## Convention
+
+If we are testing a file called fileName.ts, jest will look inside that dircectory for the file with the same name, under the `__test__` directory
+`/__test__/fileName.test.ts`
+Check the extension also
+
+## Issue with process.env
+
+This was brought by the secret container / pod we create in docker and kubernets. We have to hardoced in the setup file

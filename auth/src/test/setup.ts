@@ -6,6 +6,8 @@ import { app } from "../app";
 // This will used to create an isntance of mongo db in memory to run multiple tests at the same time without these tests reaching out to the same instance of mongo
 let mongo: any;
 beforeAll(async () => {
+  process.env.JWT_KEY = "asdfasdf";
+
   mongo = new MongoMemoryServer();
   const mongoUri = await mongo.getUri();
 
