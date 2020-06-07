@@ -1,12 +1,13 @@
-const LandingPage = ({ color }) => {
-  console.log("I'm on the server: color", color);
+const LandingPage = ({ currentUser }) => {
+  console.log(currentUser);
+
   return <h1>Home page</h1>;
 };
 
 LandingPage.getInitialProps = () => {
-  console.log("I'm on the server");
+  const response = await axios.get('/api/users/currentuser')
 
-  return { color: "red" };
+  return response.data;
 };
 
 export default LandingPage;

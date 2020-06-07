@@ -879,3 +879,43 @@ NextJS will then:
 
 Whenever we want to fetch some data with nextjs during the server side render process, we must implement the method getInitialProps on the component.
 We can not allow to fetch some data from inside of the component during the SSR process
+
+## Issue when fetching data in getInitialProps
+
+GET :: await axios.get('/api/users/currentuser')
+
+```
+(1)
+LandingPage.getInitialProps = () => {
+  const response = await axios.get('/api/users/currentuser') // (*diff)
+
+  return response.data;
+};
+```
+
+```
+const LandingPage = ({ currentUser }) => {
+  const response = await axios.get('/api/users/currentuser') // (*diff)
+
+  return <h1>Home page</h1>;
+};
+```
+
+We can not make the request like this in the server side - error: connect ECONNREFUSED 127.0.0.1:80
+
+### Process when request Browser vs Server
+
+#### Request from browser, in the client (1)
+
+[client ] GET ticketing.dev -> [our computer] GET 127.0.0.1:80 (file hosts, trick computer) -> [ingress nginx] Receives an route it appropiately to our -> [client nextjs]
+
+Came back:
+[client / browser] <- A fully rendered HTML file with content
+
+Browser
+React + axios -> POST /api/users/currentuser (browser will add automatically the domain !!! and attach ticketing.dev/api/users/currentuser) -> [Computer ] -> POST 127.0.0.1:80/api/users/currentuser -> [ingress nginx] GET /api/users/currentuser [auth service]
+
+#### Request from Server Side, in the client (2)
+
+It's almost all the same
+The difference is that when nextjs executes getInitialProps and make the get request to explicitly '/api/users/currentuser', as it is being executed in the server, the node http lawer will behave somehow similar to the browser. If not domanin passed down to the url in the request, node will add the local host 127.0.0.1:80. The problem is that the localhost that ist rying to reach, is the localhost OF THE CONTAINER!!! And there is nothing running on localhost:80 that's why the nasty error message of ERRORREFUSED, there's nothing there. That last request is not being catch by the ingress nginx and redirected to anywhere
