@@ -813,6 +813,8 @@ Check the extension also
 
 This was brought by the secret container / pod we create in docker and kubernets. We have to hardoced in the setup file
 
+# 11 - Integrating a Server-Side-Rendered React App
+
 ## Docker
 
 We create a dockerfile to create an image of the client directory, the client app
@@ -822,3 +824,17 @@ Then we test the dockerfile and dockerignore with
 
 And then we do a push to docker
 \$ docker push stefanofrontani/client
+
+## Making client to run on the cloud
+
+We have to configure
+
+1. client-depl.yaml
+   To create the deployment for the pod and the service cluster ip (if not specified) to connect to that container
+
+2. skaffold.yaml
+   For it to watch changes inside the client directory
+
+3. Configure ingress-srv.yaml
+   To tell ingress nginx to route to the correct route
+   Note: This is sequentially. nginx will go from top to bottom inside the paths array and will try to march each route in order. The regexp on the client route will cath everything, that's why it is the last on the array. (- path: /?(.\*))
