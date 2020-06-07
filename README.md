@@ -838,3 +838,21 @@ We have to configure
 3. Configure ingress-srv.yaml
    To tell ingress nginx to route to the correct route
    Note: This is sequentially. nginx will go from top to bottom inside the paths array and will try to march each route in order. The regexp on the client route will cath everything, that's why it is the last on the array. (- path: /?(.\*))
+
+## Problems with reflecting code changes:
+
+### next.config.js
+
+Automatically loaded up by nextjs whenever the app starts up. Next reads this, locate the middleware function and will call it with the default configuration with our update done in that file
+Basically, what it does, it will pulled every file every 300 ms.
+
+### The definitive solution if not changes reflected:
+
+List our pods
+\$ kubectl get pods
+
+Get the podname of the pod we have to get changes from
+name structure: client-depl-whateverinhere
+
+Kill it manually
+kubectl delete pod client-depl-whateverinhere
