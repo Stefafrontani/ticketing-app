@@ -856,3 +856,11 @@ name structure: client-depl-whateverinhere
 
 Kill it manually
 kubectl delete pod client-depl-whateverinhere
+
+## Communication between services
+
+First, we've got nginx ingress service for an intial routing that routes the request, then the request gets redirected to a cluster ip, and from there the request goes finally to the pod, our cotainer, the express service
+
+## Axios
+
+For client http request.
