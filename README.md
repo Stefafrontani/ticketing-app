@@ -864,3 +864,18 @@ First, we've got nginx ingress service for an intial routing that routes the req
 ## Axios
 
 For client http request.
+
+## Client - NextJS
+
+Incoming GET ticketing.dev
+NextJS will then:
+
+- Inspect URL of that request. Determine set of components to show
+- Call those components with the static method 'getInitialProps'
+- Render each component with data from 'getInitialProps' one time
+- Assemble HTML from all components, send back response
+
+## Fetch data with nextjs - getInitialProps
+
+Whenever we want to fetch some data with nextjs during the server side render process, we must implement the method getInitialProps on the component.
+We can not allow to fetch some data from inside of the component during the SSR process
