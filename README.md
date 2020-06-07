@@ -812,3 +812,13 @@ Check the extension also
 ## Issue with process.env
 
 This was brought by the secret container / pod we create in docker and kubernets. We have to hardoced in the setup file
+
+## Docker
+
+We create a dockerfile to create an image of the client directory, the client app
+
+Then we test the dockerfile and dockerignore with
+\$ docker build -t stefanofrontani/client .
+
+And then we do a push to docker
+\$ docker push stefanofrontani/client
