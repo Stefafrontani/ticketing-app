@@ -1,6 +1,15 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
+import request from "supertest";
 import { app } from "../app";
+
+declare global {
+  namespace NodeJS {
+    interface Global {
+      signin(): Promise<string[]>;
+    }
+  }
+}
 
 // MongoMemoryServer
 // This will used to create an isntance of mongo db in memory to run multiple tests at the same time without these tests reaching out to the same instance of mongo
@@ -32,3 +41,18 @@ afterAll(async () => {
   await mongo.stop();
   await mongoose.connection.close();
 });
+
+global.signin = async () => {
+  const email = "test@test.com";
+  const password = "password";
+
+  const response = await request(app).post("/api/users/signup").send({
+    email,
+    password,
+  });
+  expect(201);
+
+  const cookie = response.get("Set-Cookie");
+
+  return cookie;
+};
