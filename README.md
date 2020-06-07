@@ -929,3 +929,30 @@ This is not that cool because we would need to know the name of that service and
 
 2. Send the request to ingress nginx and let him decide where to route it. This is GOOD.
    Potential issue: when we deal with requests in the server, it doesn't care about the cookie at all so we will have to manage it with some manual process
+
+## Cross NAmespace Service Communication - Access to Ingress nignx
+
+### From the browser- local machine:
+
+We go to localhost (ticketing.dev, port 80 - tricked by the hosts file remember)
+
+### From the pod
+
+To try to access ingress nginx from a container - pod, its a bit different.
+Whenever we try to reach a service from a different service we make the request with the specified service name we want to request: http://auth-srv/api/users/... Remember this used clusterIp services between the services
+This is enable because both belongs to the same namespace, in this case - auth-srv and client
+We can see namepsace names with the command:
+kubectl get namespace
+The namespace of the ingress-nginx when running the command is 'ingress-nginx' namespace
+We should access to the ingress-srv
+http://NAMEOFSERICE.NAMESPACE.svc.cluster.local
+
+For this, we have to get, not only the namespace of ingress-nginx, but also the service running inside of if:
+\$ kubectl get services
+Will show only the services of the default namespace
+
+\$ kubectl get services -n ingress-nginx
+Output: table with 2 rows. We will use ingress-nginx-controller this services
+
+So:
+http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser
