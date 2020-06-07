@@ -919,3 +919,13 @@ React + axios -> POST /api/users/currentuser (browser will add automatically the
 
 It's almost all the same
 The difference is that when nextjs executes getInitialProps and make the get request to explicitly '/api/users/currentuser', as it is being executed in the server, the node http lawer will behave somehow similar to the browser. If not domanin passed down to the url in the request, node will add the local host 127.0.0.1:80. The problem is that the localhost that ist rying to reach, is the localhost OF THE CONTAINER!!! And there is nothing running on localhost:80 that's why the nasty error message of ERRORREFUSED, there's nothing there. That last request is not being catch by the ingress nginx and redirected to anywhere
+
+## Solutions when fetching data in getInitialProps
+
+1. Give the exact path tp the url and don't let node http lawer to add localhost:80.
+   This would be to make a request exactly to http://auth-srv/api/users/currentuser
+
+This is not that cool because we would need to know the name of that service and it would be hardcoded for every request we do on SSR
+
+2. Send the request to ingress nginx and let him decide where to route it. This is GOOD.
+   Potential issue: when we deal with requests in the server, it doesn't care about the cookie at all so we will have to manage it with some manual process
