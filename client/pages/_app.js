@@ -1,4 +1,5 @@
 import buildClient from "../api/build-client";
+import Header from "../components/header";
 import "bootstrap/dist/css/bootstrap.css";
 
 // When defining an app.js component, next will wrap the page component we visit (home, index or banana) and return it
@@ -6,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.css";
 const AppComponent = ({ Component, pageProps, currentUser }) => {
   return (
     <div>
-      <h1>Header! {currentUser.email}</h1>
+      <Header currentUser={currentUser} />
       <Component {...pageProps} />
     </div>
   );
