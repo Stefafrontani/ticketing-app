@@ -42,7 +42,12 @@ AppComponent.getInitialProps = async (appContext) => {
   const client = buildClient(appContext.ctx);
   const { data } = await client.get("/api/users/currentuser");
 
-  console.log(data);
+  // We sure have components that does not have getInitialProps to call
+  let pageProps = {};
+  if (appContext.Component.getInitialProps) {
+    // Called manually the getInitialProps function from Component
+    pageProps = await appContext.Component.getInitialProps(appContext.ctx);
+  }
 
   return data;
 };

@@ -1015,3 +1015,7 @@ We move the getInitialProps called to inside the \_app.js file, inside the AppCo
 When calling getInitialProps inside the global \_app.js HOC, the specific getIniitalProps on the other components are not called
 
 From the commit: console.log('landing page'); is not being called.
+
+### Solution for the getInitialProps
+
+Called manually the getInitialProps function for the Component received as prop.
