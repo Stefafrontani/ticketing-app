@@ -1,4 +1,4 @@
-import axios from "axios";
+import buildClient from "../api/build-client";
 
 const LandingPage = ({ currentUser }) => {
   console.log(currentUser);
@@ -6,8 +6,9 @@ const LandingPage = ({ currentUser }) => {
   return <h1>Home page</h1>;
 };
 
-LandingPage.getInitialProps = async ({ req }) => {
-  if (typeof window === "undefined") {
+LandingPage.getInitialProps = async (context) => {
+  // Comment the refactor because its important to understand the request we need to make, differing the server and the browser environments
+  /*   if (typeof window === "undefined") {
     // We are on the server !!
     // Request should be made to http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser
     const { data } = await axios.get(
@@ -17,7 +18,7 @@ LandingPage.getInitialProps = async ({ req }) => {
         // rules:
         // - host: ticketing.dev //Inside ingress-srv-yaml -> In the request theres no clut about what domain to used so ingress nginx has no clue where to apply those rolues
         headers: {
-          ...req.headers,
+          ...context.req.headers,
           Host: "ticketing.dev", // This is included in the req object
         },
       }
@@ -28,7 +29,12 @@ LandingPage.getInitialProps = async ({ req }) => {
     // Request should be made with a base url of ''
     const { data } = await axios.get("/api/users/currentuser");
     return data;
-  }
+  } */
+
+  const client = buildClient(context);
+  const { data } = await client.get("/api/users/currentuser");
+
+  return data;
 };
 
 export default LandingPage;
