@@ -3,10 +3,10 @@ import "bootstrap/dist/css/bootstrap.css";
 
 // When defining an app.js component, next will wrap the page component we visit (home, index or banana) and return it
 // This is because if we ever wanted to give global css, only in this _app.js, when we go to /banana, index.js cs files modules will not be loaded, this is the reason behing wrapping the component to show inside this app component, to enable global modules to all pages
-const AppComponent = ({ Component, pageProps }) => {
+const AppComponent = ({ Component, pageProps, currentUser }) => {
   return (
     <div>
-      <h1>Header!</h1>
+      <h1>Header! {currentUser.email}</h1>
       <Component {...pageProps} />
     </div>
   );
@@ -38,7 +38,6 @@ const AppComponent = ({ Component, pageProps }) => {
   } */
 
 AppComponent.getInitialProps = async (appContext) => {
-  console.log("landing page");
   const client = buildClient(appContext.ctx);
   const { data } = await client.get("/api/users/currentuser");
 
@@ -49,7 +48,10 @@ AppComponent.getInitialProps = async (appContext) => {
     pageProps = await appContext.Component.getInitialProps(appContext.ctx);
   }
 
-  return data;
+  return {
+    pageProps,
+    ...data, // For the currentUser Prop - We can receive it as a currentUser prop inside AppComponent
+  };
 };
 
 export default AppComponent;
