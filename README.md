@@ -1002,3 +1002,16 @@ Client -> Internet -> Reverse Proxy -> Server
 
 It is the application that runs inside a kubernetes cluster and configures that http load balancer acording to the ingress resource
 This is deployed in a pod along with the load balancer
+
+## getInitialProps - AppComponent (\_app) vs other common react component
+
+When calling getInitialProps from a common component we have an argument "context = { req, res }"
+When we used that function inside an AppComponent inside \_app.js file, the argument passed to that function is
+context = { AppTree, Commponent, router, ctx: { req, res } }
+We move the getInitialProps called to inside the \_app.js file, inside the AppComponent because we need to know if a user is logged in not only where it was placed before (pages/index.ts)
+
+### Issue with getInitialProps in \_app.js
+
+When calling getInitialProps inside the global \_app.js HOC, the specific getIniitalProps on the other components are not called
+
+From the commit: console.log('landing page'); is not being called.
