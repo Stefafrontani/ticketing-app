@@ -4,5 +4,10 @@ import "bootstrap/dist/css/bootstrap.css";
 // This is because if we ever wanted to give global css, only in this _app.js, when we go to /banana, index.js cs files modules will not be loaded, this is the reason behing wrapping the component to show inside this app component, to enable global modules to all pages
 
 export default ({ Component, pageProps }) => {
-  return <Component {...pageProps} />;
+  return (
+    <div>
+      <h1>Header!</h1>
+      <Component {...pageProps} />
+    </div>
+  );
 };
