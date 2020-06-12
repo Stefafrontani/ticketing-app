@@ -1,13 +1,34 @@
+import axios from "axios";
+
 const LandingPage = ({ currentUser }) => {
   console.log(currentUser);
 
   return <h1>Home page</h1>;
 };
 
-LandingPage.getInitialProps = () => {
-  const response = await axios.get('/api/users/currentuser')
-
-  return response.data;
+LandingPage.getInitialProps = async ({ req }) => {
+  if (typeof window === "undefined") {
+    // We are on the server !!
+    // Request should be made to http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser
+    const { data } = await axios.get(
+      // Look at the ingress We also have to add the ingress-srv.yaml: it has a certain array of rules to decide the domain the request will be redirected to. in our case, that rule, that domain, is ticketing.dev
+      "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser",
+      {
+        // rules:
+        // - host: ticketing.dev //Inside ingress-srv-yaml -> In the request theres no clut about what domain to used so ingress nginx has no clue where to apply those rolues
+        headers: {
+          ...req.headers,
+          Host: "ticketing.dev", // This is included in the req object
+        },
+      }
+    );
+    return data;
+  } else {
+    // We are on the browser !!
+    // Request should be made with a base url of ''
+    const { data } = await axios.get("/api/users/currentuser");
+    return data;
+  }
 };
 
 export default LandingPage;

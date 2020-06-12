@@ -956,3 +956,49 @@ Output: table with 2 rows. We will use ingress-nginx-controller this services
 
 So:
 http://ingress-nginx-controller.ingress-nginx.svc.cluster.local/api/users/currentuser
+
+## getInitialProps - Where is it called ?
+
+In both, server and client
+In the server:
+
+- Hard refresh on page
+- Clicking from different domain
+- Typing url into address bar
+
+In the client
+
+- Navigation from one page to another while in the app
+
+We will have to add the domain only when needed, when getInitialProps is called in the Server Side
+
+## 403 - Forbidden unauthorized
+
+Not an nginx issue issue but notes were taken anyways
+
+### Ingress
+
+Ingress: resource of kubernets that let us configure an http load balancer for apps running on kubernetes. Represented by 1 or more services.
+
+Load Balancer: hardware (physical or virtual) that works as a reverse proxy to distribute network and/or redirect traffic across diferent servers.
+
+Proxy (forward proxy): Intermediate between client (and their requests) and different servers.
+The client directs the request to the proxy server, which evaluates the request and performs the required network transactions. Potentially masking the true origin of the request to the resource server.
+
+Reverse proxy: Same architecture patter.
+
+Differences proxies
+Difference subtle between proxy and reverse proxy. The proxy (non reverse) sits right after the client and their requests, its inside their netword edge (the limit where the device or local network starts reaching out to the "INTERNET"). A reverse proxy sits right after that edge network, that is: next to those origin services the client wants to communicate
+Ensures that no origin server ever communicates directly with that specific client
+Sits in front of an origin server and ensures that no client ever communicates directly with that origin server.
+
+Forward proxy
+Client -> Reverse Proxy -> Internet -> Server
+
+Reverse proxy:
+Client -> Internet -> Reverse Proxy -> Server
+
+### Ingress controller
+
+It is the application that runs inside a kubernetes cluster and configures that http load balancer acording to the ingress resource
+This is deployed in a pod along with the load balancer
