@@ -1168,3 +1168,16 @@ only search for the jwt inside the req.session object. If it finds it, the middl
 
 requireAuth:
 throws the error (/_ commented _/) if the req.currentUser is not in the request
+
+## Faking authentication During Tests
+
+Cookis structure:
+express:sess=
+eyJqd3QiOiJleUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKcFpDSTZJalZsWlRVeU56Rm1ZMk01WkdOaU1EQXhPR0U0TW1FelpDSXNJbVZ0WVdsc0lqb2lkR1Z6ZEVCMFpYTjBMbU52YlNJc0ltbGhkQ0k2TVRVNU1qQTNOakEyTTMwLm9ueWVCbzdXMTU5Tml6bUxlVFQ1VTRhRVdoWFczLWlWbmZsWThJTk4tOTQifQ==
+
+In the auth service, we create a fake function called signin, and we attach it to the global namespace.
+In that function we create a cookie sending a request to /api/users/signup, extract that cookie in the response header and return it
+
+In the tickets service, we no longer have the /apu/users/signup router to called in order to get a cookie. So we have to create ourselves
+
+So we remove everything inside that signin function and let comment the steps of what we should do to create that cookie.
