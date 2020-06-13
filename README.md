@@ -1135,3 +1135,12 @@ Redirect to:
 /app # //HERE WRITE COMMANDS
 Commands: cd node_modules/@sfticketing/common
 cat package.json (and check package file common module version)
+
+## Create-Read-Update-Destroy Server Setup (Section 13)
+
+### Initial setup
+
+1. We copy paste these files from auth, changing auth specific names for tickets one
+2. Build the image for tickets service and push it to the hub. Why? When we run skaffold, skaffold go to docker hub and pulled images from the hub, that's why we have to push it there.
+   Buiild image: docker build -t stefanofrontani/tickets .
+   Push image: docker push stefanofrontani/tickets
