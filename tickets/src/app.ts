@@ -2,7 +2,7 @@ import express from "express";
 import "express-async-errors";
 import { json } from "body-parser";
 import cookieSession from "cookie-session";
-import { errorHandler, NotFoundError } from "@sfticketing/common";
+import { errorHandler, NotFoundError, currentUser } from "@sfticketing/common";
 import { createTicketRouter } from "./routes/new";
 
 const app = express();
@@ -14,6 +14,8 @@ app.use(
     secure: process.env.NODE_ENV !== "test", // cookies only used when https protection
   })
 );
+
+app.use(currentUser);
 
 app.use(createTicketRouter);
 

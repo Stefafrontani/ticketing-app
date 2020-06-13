@@ -1158,3 +1158,13 @@ This is not a problem because the only way to connect to that service (tickets-m
 
 Run tests with:
 \$ npm run test
+
+## Adding auth protection
+
+We have to use the currentUser and requireAuth middlewares
+Reminder:
+currentUser middleware:
+only search for the jwt inside the req.session object. If it finds it, the middleware attach currentUSer prop to the request object.
+
+requireAuth:
+throws the error (/_ commented _/) if the req.currentUser is not in the request
