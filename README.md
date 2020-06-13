@@ -1062,13 +1062,43 @@ The module created is called `common`.
 
 ```
 {
-"name": "@sgticketing/common", // publish common inside sgticketing organization
+   "name": "@sgticketing/common", // publish common inside sgticketing organization
+   "version": "1.0.0",
+   "description": "",
+   "main": "./build/index.js", // the file wher eit will take whenever an import is made to the module import module from '@sfticketing/common'
+   "types": "./build/index.d.ts", // Types - used by ts
+   "files": [ // Every file that gets include on the final version of our package
+     "build/**/*"
+  ],
+   "scripts": {
+     "clean": "del build", // Clean the build directory
+     "build": "npm run clean && tsc" // Clean before build
+         "pub": "git add . && git commit -m \"Updates\" && npm version patch && npm run build && npm publish"
+ // Publish git after: a fresh commit, increase version, remove build, rebuild build and publish
+   },
+   "keywords": [],
+   "author": "",
+   "license": "ISC",
+   "devDependencies": {
+     "del-cli": "^3.0.1",
+     "typescript": "^3.9.5"
+  }
+}
+
 ```
 
 Commands
+Initial publish
 \$ npm publish --access public
 
 For 403 problems when running publish command
 \$ npm login
 -- Username: stefanofrontani
 -- password:
+
+For publishing every change:
+\$ npm npm version patch (from 1.0.0 -> 1.0.1)
+
+\$ npm run build
+
+\$ npm publish
