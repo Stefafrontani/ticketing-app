@@ -3,6 +3,7 @@ import "express-async-errors";
 import { json } from "body-parser";
 import cookieSession from "cookie-session";
 import { errorHandler, NotFoundError } from "@sfticketing/common";
+import { createTicketRouter } from "./routes/new";
 
 const app = express();
 app.set("trust proxy", true); // Express service will be behind nginx proxy so traffic is been proxyed to our app through ingress-nginx. With this line, we tell express to accept (trust) the proxy ingress-nginx anyways
@@ -13,6 +14,8 @@ app.use(
     secure: process.env.NODE_ENV !== "test", // cookies only used when https protection
   })
 );
+
+app.use(createTicketRouter);
 
 app.all("*", (req, res, next) => {
   next(new NotFoundError());
