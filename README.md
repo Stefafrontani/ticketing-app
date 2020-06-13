@@ -1153,3 +1153,8 @@ cat package.json (and check package file common module version)
 We hardodoe inside the tickets-srv deployment file an environment variable that will hold the mongo uri.
 
 This is not a problem because the only way to connect to that service (tickets-mongo-srv) is inside the cluster. No problem at all.
+
+### Test first approach
+
+Run tests with:
+\$ npm run test
