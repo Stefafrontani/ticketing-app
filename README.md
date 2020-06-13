@@ -1147,3 +1147,9 @@ cat package.json (and check package file common module version)
 3. Create deployment and service
 4. Update skaffold.yaml file
 5. Create mongoDB deployment and service
+
+### Mongo Connection URI
+
+We hardodoe inside the tickets-srv deployment file an environment variable that will hold the mongo uri.
+
+This is not a problem because the only way to connect to that service (tickets-mongo-srv) is inside the cluster. No problem at all.
