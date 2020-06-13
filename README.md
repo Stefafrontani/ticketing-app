@@ -1144,3 +1144,4 @@ cat package.json (and check package file common module version)
 2. Build the image for tickets service and push it to the hub. Why? When we run skaffold, skaffold go to docker hub and pulled images from the hub, that's why we have to push it there.
    Buiild image: docker build -t stefanofrontani/tickets .
    Push image: docker push stefanofrontani/tickets
+3. Create deployment and service
