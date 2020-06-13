@@ -1033,3 +1033,26 @@ The response in that service is to reset user session on the request:
 We are gonna send back a cookie.
 
 Whenever we make a request from the getInitialProps in the server, if any cookie gets return to us, we are not going to make anything with it whatsoever. We need to make sure that this request comes from the user browser, it will handle cookies.
+
+## Sharing logig between services
+
+We have to use the same code (errors, some middlewares for authentication, etc) in different services
+There are many ways to do that, here are 3 ways:
+
+1. Copy paste code
+2. Create a git submodule (a repo by itself that will be clone inside every service that needs it)
+3. Create a npm module and publish it inside npm registry
+
+### NPM registry
+
+There are 3 diff ways to publish your module
+Public:
+---For everyone
+---For organization
+
+Private:
+---For youself.
+------payed, only you can access this module
+---For the company only
+
+We are going to use the public company so we created a npmjs organization call sfticketing
