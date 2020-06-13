@@ -1019,3 +1019,17 @@ From the commit: console.log('landing page'); is not being called.
 ### Solution for the getInitialProps
 
 Called manually the getInitialProps function for the Component received as prop.
+
+## Signout
+
+When we try to logout we have to request to the auth api/users/signout service.
+The request must be coming from inside our component (from browsers) - Not getInitialProps (from server). The server does not know what to do with any cookie.
+The response in that service is to reset user session on the request:
+
+```
+   req.session = null;
+```
+
+We are gonna send back a cookie.
+
+Whenever we make a request from the getInitialProps in the server, if any cookie gets return to us, we are not going to make anything with it whatsoever. We need to make sure that this request comes from the user browser, it will handle cookies.
