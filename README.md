@@ -1056,3 +1056,19 @@ Private:
 ---For the company only
 
 We are going to use the public company so we created a npmjs organization call sfticketing
+The module created is called `common`.
+
+#### Publishing in npm registry
+
+```
+{
+"name": "@sgticketing/common", // publish common inside sgticketing organization
+```
+
+Commands
+\$ npm publish --access public
+
+For 403 problems when running publish command
+\$ npm login
+-- Username: stefanofrontani
+-- password:
