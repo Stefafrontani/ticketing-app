@@ -1112,3 +1112,26 @@ auth/middlewares
 We have to install the common module
 
 For last, we have to update import statements
+
+## Updating version:
+
+Inside common directory:
+\$ npm run pub
+
+Inside the service to update common: (/auth for example)
+\$ npm update @sfticketing/common
+
+OPTIONALLY
+Once update executes, we can:
+
+Inspect the pods to see if the pod of that service was updated:
+kubectl get pods
+get name
+
+Run the shell of that container to see the files inside (and check updated version of common module)
+kubectl exec -it {podname} sh
+
+Redirect to:
+/app # //HERE WRITE COMMANDS
+Commands: cd node_modules/@sfticketing/common
+cat package.json (and check package file common module version)
