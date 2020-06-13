@@ -1181,3 +1181,7 @@ In that function we create a cookie sending a request to /api/users/signup, extr
 In the tickets service, we no longer have the /apu/users/signup router to called in order to get a cookie. So we have to create ourselves
 
 So we remove everything inside that signin function and let comment the steps of what we should do to create that cookie.
+
+## Building a session
+
+The cookie construction mentioned above is
