@@ -1146,3 +1146,4 @@ cat package.json (and check package file common module version)
    Push image: docker push stefanofrontani/tickets
 3. Create deployment and service
 4. Update skaffold.yaml file
+5. Create mongoDB deployment and service
