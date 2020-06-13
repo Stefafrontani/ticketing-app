@@ -2,6 +2,7 @@ import request from "supertest";
 import { app } from "../../app";
 
 it("returns a 404 if the ticket is not found", async () => {
+  // This test fails unexpectedly - 400 instead of 404
   await request(app).get("/api/tickets/validticketid").send().expect(404);
 });
 
@@ -10,7 +11,7 @@ it("returns the ticket if the ticket is found", async () => {
   const price = 20;
 
   const response = await request(app)
-    .post("/api/tickets/validticketid")
+    .post("/api/tickets")
     .set("Cookie", global.signin())
     .send({
       title,
