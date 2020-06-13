@@ -1145,3 +1145,4 @@ cat package.json (and check package file common module version)
    Buiild image: docker build -t stefanofrontani/tickets .
    Push image: docker push stefanofrontani/tickets
 3. Create deployment and service
+4. Update skaffold.yaml file
