@@ -1185,3 +1185,16 @@ So we remove everything inside that signin function and let comment the steps of
 ## Building a session
 
 The cookie construction mentioned above is
+
+## Reminder on mongoose with typescript
+
+We have 3 different interfaces when dealig with mongoose with typescript
+
+// Attributes that the build function should received
+interface TicketAttrs {}
+
+// Properties that a document will have, mongoose will add some besides the Attrs above (createdAt for example)
+interface TicketDoc {}
+
+// Define the build function inside in order to have a validation on the attributes we should pass to the ticket model when we create a ticket.
+interface TicketModel {}
