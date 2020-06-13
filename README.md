@@ -1102,3 +1102,13 @@ For publishing every change:
 \$ npm run build
 
 \$ npm publish
+
+#### Installing common module
+
+We remove all the code that is going to be shared - dirs:
+auth/errors
+auth/middlewares
+
+We have to install the common module
+
+For last, we have to update import statements
