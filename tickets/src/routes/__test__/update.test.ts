@@ -20,7 +20,6 @@ it("returns a 401 if the user is not authenticated", async () => {
 
   await request(app)
     .put(`/api/tickets/${id}`)
-    // Not authenticated
     // .set("Cookie", global.signin())
     .send({
       title: "Valid title",
