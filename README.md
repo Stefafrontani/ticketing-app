@@ -1198,3 +1198,34 @@ interface TicketDoc {}
 
 // Define the build function inside in order to have a validation on the attributes we should pass to the ticket model when we create a ticket.
 interface TicketModel {}
+
+## NATS Streaming Server - An Event Bus Implementation (Section 14)
+
+We configure a nats streaming server - deployment (for the pod) and a service (to communication) as always.
+New things:
+args:
+When skaffold reads the files and creates these objects it runs commands. We can have arguments to use in those commands, that is the function of this:
+
+```
+containers:
+- name: nats
+   image: nats-streaming:0.17.0
+   args:
+   [
+      "-p", // port to connect to the pod
+      "4222",
+      "-m", // Port to connect to the monitoring api (inside localhost:8222/streaming) - More in nats-streaming-server repo
+      "8222",
+      "-hbi", // heart beat: a little request that nats streaming server send to its clients. Serves as a help-check and see if they are still runinng. hbi sets the time between those heartbeat requests
+      "5s",
+      "-hbt", // how long each client has to respond
+      "5s",
+      "-hbf", // how many times a client can fail in their response before nats removing that client from the clients array list
+      "2",
+      "-SD",
+      "-cid",
+      "ticketing",
+   ]
+```
+
+NATS Streaming server - Creating nats deployment & service - (263)
