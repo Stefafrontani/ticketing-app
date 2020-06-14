@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@sfticketing/common": "^1.0.5",
+    "@sfticketing/common": "^1.0.6",
     "@types/cookie-session": "^2.0.40",
     "@types/express": "^4.17.6",
     "@types/jsonwebtoken": "^8.5.0",
