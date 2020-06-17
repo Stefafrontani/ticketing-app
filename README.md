@@ -1229,3 +1229,7 @@ containers:
 ```
 
 NATS Streaming server - Creating nats deployment & service - (263)
+
+## Connecting to NATS in a Node JS World (Section 15)
+
+Everything is inside the nats-streaming-server repo. IT has a readme with an exaplanation of the nats streaming server basic functionality as well as almost all the code we end up pasting here.
