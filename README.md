@@ -1290,3 +1290,5 @@ Inside transactions service
 What happened if we save it correclty but we never send the event so the accounts service can processed it? MAybe NATS streaming server connection failed. Well, then we would have some data inconsistency among two services. How do we solve this?
 
 We save the events in a separate collection inside the same DB of the service that created that new resource (in this case transactions service). So if NATS is down, whenever goes up again, it will ask for those events that has a (NO) value inside a property that will tell whether or not it was sent / published to NATS. (sent prop)
+
+At this point inside the repo, the tests are failing because we do not have a nats client in our test environment. Solution in next commit. We will solve those teste creating a fake connection to that nats server
