@@ -1274,3 +1274,19 @@ Then create a port to enable connection to that deployment from the outside
 Remember that that listener, listens on the 4222, on localhost
 
 Go to postman and create a ticket (you must have a cookie so signup and / login first) - Post to https://ticketing.dev/api/users/signup and then to https://ticketing.dev/api/tickets
+
+### Data integrity issues
+
+Imagine this:
+
+Inside transactions service
+
+```
+   await deposit.save();
+   <!-- This would be used in accounts service, which tracks the account balance of an user -->
+   new TicketUpdatedPublisher(natsWrapper.client).publish(deposit);
+```
+
+What happened if we save it correclty but we never send the event so the accounts service can processed it? MAybe NATS streaming server connection failed. Well, then we would have some data inconsistency among two services. How do we solve this?
+
+We save the events in a separate collection inside the same DB of the service that created that new resource (in this case transactions service). So if NATS is down, whenever goes up again, it will ask for those events that has a (NO) value inside a property that will tell whether or not it was sent / published to NATS. (sent prop)
