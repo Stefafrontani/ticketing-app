@@ -21,9 +21,11 @@ const start = async () => {
 
     // In case the NATS deployment goes down, we will listen to that close event and exit the whole process. Thanks to skaffold, the process will be restarted.
     natsWrapper.client.on("close", () => {
+      // This closes the process whenever we loose conenction with NATS
       console.log("NATS connection closed!");
       process.exit();
     });
+    // This closes the client whenever we end the terminal process
     process.on("SIGINT", () => natsWrapper.client.close());
     process.on("SIGTERM", () => natsWrapper.client.close());
 
