@@ -19,6 +19,14 @@ const start = async () => {
       "http://nats-srv:4222"
     );
 
+    // In case the NATS deployment goes down, we will listen to that close event and exit the whole process. Thanks to skaffold, the process will be restarted.
+    natsWrapper.client.on("close", () => {
+      console.log("NATS connection closed!");
+      process.exit();
+    });
+    process.on("SIGINT", () => natsWrapper.client.close());
+    process.on("SIGTERM", () => natsWrapper.client.close());
+
     await mongoose.connect(process.env.MONGO_URI, {
       // Not that relevant config options, stop mongoose warnings
       useNewUrlParser: true,

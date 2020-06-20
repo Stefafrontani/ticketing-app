@@ -1252,4 +1252,13 @@ For this we use a singleton implementation - see nats-wrapper.ts.
 
 After doing this, we then can import that natsWrapper instance inside other files, such as new.ts. In that file we call TicketCreatedPublisher to publish that new ticket created, passing down the natsWrapper.client to that.
 
-Finally: We are doing the close and exit thing. We lsiten for close event (when closing the nats server) and as a callback,, in a main file, we can kill the process. (We could put the following code inside NatsWrapper class (nats-wrapper.ts) but its kinda weird that a class exit a while programm process.
+Add to commit: Finally: We are doing the close and exit thing. We lsiten for close event (when closing the nats server) and as a callback,, in a main file, we can kill the process. (We could put the following code inside NatsWrapper class (nats-wrapper.ts) but its kinda weird that a class exit a while programm process.
+
+```
+    natsWrapper.client.on("close", () => {
+      console.log("NATS connection closed!");
+      process.exit();
+    });
+    process.on("SIGINT", () => natsWrapper.client.close());
+    process.on("SIGTERM", () => natsWrapper.client.close());
+```
