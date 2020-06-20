@@ -12,6 +12,9 @@ declare global {
   }
 }
 
+// This line will make jest to import the file with that same name inside te mock folder we created on this commit, instead of the file of the path itself
+jest.mock("../nats-wrapper");
+
 // MongoMemoryServer
 // This will used to create an isntance of mongo db in memory to run multiple tests at the same time without these tests reaching out to the same instance of mongo
 let mongo: any;
