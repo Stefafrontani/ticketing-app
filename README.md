@@ -1262,3 +1262,15 @@ Add to commit: Finally: We are doing the close and exit thing. We lsiten for clo
     process.on("SIGINT", () => natsWrapper.client.close());
     process.on("SIGTERM", () => natsWrapper.client.close());
 ```
+
+Test listener:
+go to ticketing-app dir
+In order to run the create a nats deployment
+\$ skaffold dev
+
+Inside the nats-streaming-server repo
+Then create a port to enable connection to that deployment from the outside
+\$ npm run listen
+Remember that that listener, listens on the 4222, on localhost
+
+Go to postman and create a ticket (you must have a cookie so signup and / login first) - Post to https://ticketing.dev/api/users/signup and then to https://ticketing.dev/api/tickets
