@@ -1233,3 +1233,23 @@ NATS Streaming server - Creating nats deployment & service - (263)
 ## Connecting to NATS in a Node JS World (Section 15)
 
 Everything is inside the nats-streaming-server repo. IT has a readme with an exaplanation of the nats streaming server basic functionality as well as almost all the code we end up pasting here.
+
+## Managing a NATS Client (Section 16)
+
+We start implementing the nats stremaing server inside this project. The first thing was to copy paste the code: commit's hash: 8ebad701dd025a9fac695111da28ca58be889c26 - NATS Streaming Server - Updating common module with listener and publishercode from nats-streaming-server project - (298)
+
+After that, we created a publisher for the ticket-created-publisher but before we can use it new specific ticket created publisher
+
+```
+new TicketCreatedPublisher(client).publish({ ticket })
+```
+
+For this to work, we have to passed down a client. The problem is that we want to mantain the client through all of the app, such as mongoose does: mongoose exports from its module 'mongoose' as an instance of what could be a Mongoose Class. Every tyime you import mongoose inside a module, you then have access to that same instance that was initially connected to a db inside an index.ts.
+
+We have to do something similar with the nats streaming server. We should have a class NatsWrapper, instantiate that and export that instance, so that we can use that same instance inside eery file inside our client. This is to prevent a cyclic dependency (Between the index.ts [where the nats-streaming-server connection should happen], and the others files were we need that same connection [ tickets/routes/new.ts ] for example)
+
+For this we use a singleton implementation - see nats-wrapper.ts.
+
+After doing this, we then can import that natsWrapper instance inside other files, such as new.ts. In that file we call TicketCreatedPublisher to publish that new ticket created, passing down the natsWrapper.client to that.
+
+Finally: We are doing the close and exit thing. We lsiten for close event (when closing the nats server) and as a callback,, in a main file, we can kill the process. (We could put the following code inside NatsWrapper class (nats-wrapper.ts) but its kinda weird that a class exit a while programm process.
