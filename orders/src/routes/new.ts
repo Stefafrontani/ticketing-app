@@ -1,7 +1,8 @@
+import mongoose from "mongoose";
 import express, { Request, Response } from "express";
 import { requireAuth, validateRequest } from "@sfticketing/common";
 import { body } from "express-validator";
-import mongoose from "mongoose";
+
 const router = express.Router();
 
 router.post(
