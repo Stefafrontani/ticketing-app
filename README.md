@@ -1303,3 +1303,9 @@ The new is this:
   fieldPath: metadata.name
 
 We will give the clientId as the name of the pod that is connecting to the NATS SERVER. Those ids of every pod running are unique, so if we want to run several instances of this pod, it will randomly generate new names for those new pods thus giving unique CLIENT_ID to the nats server connection
+
+## Cross-Service Data Replication In Action (Section 17)
+
+### Subtle Service Coupling
+
+When you validate the request with the structure that mongoose use for the ids, you are coupling the tickets service and its DB instance type with the orders service. In the future, the tickets service might used another type of DB that has another id structure.
