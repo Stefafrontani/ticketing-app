@@ -1309,3 +1309,25 @@ We will give the clientId as the name of the pod that is connecting to the NATS 
 ### Subtle Service Coupling
 
 When you validate the request with the structure that mongoose use for the ids, you are coupling the tickets service and its DB instance type with the orders service. In the future, the tickets service might used another type of DB that has another id structure.
+
+### Associating Orders and Tickets
+
+Two ways:
+
+1. Embedding:
+   order: { userId, status, expiresAt, ticket: wholeTicketInfo }
+
+pros:
+
+- easy to fiugre out what order is for which ticket
+  cons:
+- querying is a bit challenging. For every order we want to create, we have to see if it has a ticketid equals to the ticket we are looking for creating a new order.
+- We do not have a place to put the tickets that are not reserved! The tickets service has them but theyare not accesible after they were created and saved in that service.
+
+2. Ref/Population Feature. From mongoose
+   Orders collection
+   Tickets collection
+   We are using this one.
+
+For the status property inside an order, we created a enum type inside the common repo and update that repo sfticketing/common in this ticketing repo.
+We have to created a whole ticket model because we have to indicate what type of ticket will be related to this orders service. MAybe tickets service itself keeps track of the tickets with a whole bunch of properties, but in the orders service (currently working on) we only want some specific tickets properties to be associated with orders.
