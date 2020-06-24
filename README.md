@@ -1331,3 +1331,25 @@ pros:
 
 For the status property inside an order, we created a enum type inside the common repo and update that repo sfticketing/common in this ticketing repo.
 We have to created a whole ticket model because we have to indicate what type of ticket will be related to this orders service. MAybe tickets service itself keeps track of the tickets with a whole bunch of properties, but in the orders service (currently working on) we only want some specific tickets properties to be associated with orders.
+
+## Understanding Event Flow (Section 18)
+
+### Orders service events
+
+Remember:
+The orders service is aware of the tickets and orders colelctions
+
+The events orders service will emit are:
+
+1. order:created - When an order is created.
+   This event will go to:
+
+- tickets service: needs to be told that one of its tickets has been reserved, and no further edits to that tickets shoud be allowed
+- payments service: needs to know there is a new order that a user might submit a payment for
+- expiration service: needs to start a 15 (or whichever) minutes timer to eventually time out this order
+
+2. order:cancelled - When an order is cancelled.
+   This event will go to:
+
+- tickets service: should unreserve a ticket if the corresponding order has been cancelled so this ticket can be edited again
+- payments service: should know that any incoming payments for this order should be rejected
