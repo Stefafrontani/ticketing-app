@@ -5,6 +5,8 @@ import {
   NotAuthorizedError,
 } from "@sfticketing/common";
 import { Order, OrderStatus } from "../models/orders";
+import { OrderCancelledPublisher } from "../events/publishers/order-cancelled-publisher";
+import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
@@ -13,7 +15,7 @@ router.delete(
   requireAuth,
   async (req: Request, res: Response) => {
     const { orderId } = req.params;
-    const order = await Order.findById(orderId);
+    const order = await Order.findById(orderId).populate("ticket");
 
     if (!order) {
       throw new NotFoundError();
@@ -25,6 +27,12 @@ router.delete(
     await order.save();
 
     // Publish an event saying that an order was created
+    new OrderCancelledPublisher(natsWrapper.client).publish({
+      id: order.id,
+      ticket: {
+        id: order.ticket.id,
+      },
+    });
 
     /*Technically we are not deleting, we are updating the record status so it would not be a 204 for delete, nor a method delete on the route butt.. its ok. Not big of a deal */
     res.status(204).send(order);
