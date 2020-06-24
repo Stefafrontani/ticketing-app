@@ -1353,3 +1353,5 @@ The events orders service will emit are:
 
 - tickets service: should unreserve a ticket if the corresponding order has been cancelled so this ticket can be edited again
 - payments service: should know that any incoming payments for this order should be rejected
+
+Update "updates - 8" inside common module with the new orders events created there - order:created and order:cancelled events. Should have been v 1.0.9 but by mistake pub 2 times and end up being v 1.0.10
