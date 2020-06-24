@@ -24,7 +24,7 @@ router.delete(
     order.status = OrderStatus.Cancelled;
     await order.save();
 
-    /*TEchnically we are not deleting, we are updating the record status so it would not be a 204 for delete, nor a method delete on the route butt.. its ok. Not big of a deal */
+    /*Technically we are not deleting, we are updating the record status so it would not be a 204 for delete, nor a method delete on the route butt.. its ok. Not big of a deal */
     res.status(204).send(order);
   }
 );
