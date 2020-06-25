@@ -1339,19 +1339,63 @@ We have to created a whole ticket model because we have to indicate what type of
 Remember:
 The orders service is aware of the tickets and orders colelctions
 
-The events orders service will emit are:
+Events published by:
+
+Orders service
+These events emitted are:
 
 1. order:created - When an order is created.
    This event will go to:
 
-- tickets service: needs to be told that one of its tickets has been reserved, and no further edits to that tickets shoud be allowed
-- payments service: needs to know there is a new order that a user might submit a payment for
-- expiration service: needs to start a 15 (or whichever) minutes timer to eventually time out this order
+   - tickets service:
+     tickets needs to be told that one of its tickets has been reserved, and no further edits to that tickets shoud be allowed
+   - payments service:
+     tickets needs to know there is a new order that a user might submit a payment for
+   - expiration service:
+     tickets needs to start a 15 (or whichever) minutes timer to eventually time out this order
 
-2. order:cancelled - When an order is cancelled.
+2. order:cancelled
    This event will go to:
-
-- tickets service: should unreserve a ticket if the corresponding order has been cancelled so this ticket can be edited again
-- payments service: should know that any incoming payments for this order should be rejected
+   - tickets service:
+     tickets should unreserve a ticket if the corresponding order has been cancelled so this ticket can be edited again
+   - payments service:
+     payments should know that any incoming payments for this order should be rejected
 
 Update "updates - 8" inside common module with the new orders events created there - order:created and order:cancelled events. Should have been v 1.0.9 but by mistake pub 2 times and end up being v 1.0.10
+
+## Listening for Events and Handling Concurrency Issues (Section 13)
+
+### Time for listeners
+
+Events published by:
+
+Tickets service
+These events emitted are:
+
+1. ticket:created
+   Will be listened by:
+
+   - orders service:
+     orders needs to know the valid tickets that can be purchased
+     orders needs to know the price of each ticket
+
+2. ticket:updated
+   Will be listened by:
+
+   - orders service:
+     orders needs to know when the price of a ticket has changed
+     orders needs to know when a ticket has succesfully been reserved
+
+Payments service
+These events emitted are:
+
+1. charge:created.
+   Will be listened by:
+   - TODO - complete
+
+Expiration service
+These events emitted are:
+
+1. expiration:complete.
+   Will be listened by:
+   - TODO - complete
