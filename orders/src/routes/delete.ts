@@ -29,7 +29,7 @@ router.delete(
     // Publish an event saying that an order was created
     new OrderCancelledPublisher(natsWrapper.client).publish({
       id: order.id,
-      version: 0, // To make it compile - Throwing error the orders service - Tuto does not touch this
+      version: order.version,
       ticket: {
         id: order.ticket.id,
       },
