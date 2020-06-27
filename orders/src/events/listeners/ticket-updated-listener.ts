@@ -3,7 +3,7 @@ import { Subjects, Listener, TicketUpdatedEvent } from "@sfticketing/common";
 import { Ticket } from "../../models/tickets";
 import { queueGroupName } from "./queue-group-name";
 
-export class TicketCreatedListener extends Listener<TicketUpdatedEvent> {
+export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
   subject: Subjects.TicketUpdated = Subjects.TicketUpdated;
   queueGroupName = queueGroupName;
 
