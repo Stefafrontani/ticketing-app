@@ -1399,3 +1399,26 @@ These events emitted are:
 1. expiration:complete.
    Will be listened by:
    - TODO - complete
+
+### Optimistic Concurrency control
+
+To make this app to start having concurrency issues, we should make one ticket service instance running and 4 instances of the orders service. We then can make several (200 was the example) requests with the next steps - creat new ticket with price 5, update that ticket price to 10, update that ticket price to 15 -.
+We end up with
+
+- 200 tickets with price 15
+- 200 witkcets with different prices due to concurrency issues when dealing with the events of ticket:updated type.
+
+The solution, as mentioned before, is to versioning control. This versioning is not managed by us but by mongo and mongoose. These two have 2 ways of updating documents:
+
+Normal Record Updates
+Fetch record CZQ from the DB
+Update the document
+Save the document
+Mongoose sends an "update" request off to mongoDB --> Find the record with id "CZQ" and set its price to 10 --> Tickets DB: [{ ticketId: CZQ, price: 10, version: 1 }]
+
+Record Updates with Optimistic Concurrency Control: 100% applicable to many other DB very easily. Not Mongo unique
+Fetch record CZQ from the DB
+Update the document
+Save the document
+`mongoose updates the 'version' field of the document automatically`
+Mongoose sends an "update" request off to mongoDB --> Find the record with id "CZQ" and `a version of 1 and` set its price to 10 --> Tickets DB: [{ ticketId: CZQ, price: 10, version: 1 }]
