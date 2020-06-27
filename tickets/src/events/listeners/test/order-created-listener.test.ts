@@ -38,3 +38,14 @@ const setup = async () => {
 
   return { listener, ticket, data, msg };
 };
+
+it("sets the orderId /*userId*/ of the ticket", async () => {
+  const { listener, ticket, data, msg } = await setup();
+
+  await listener.onMessage(data, msg);
+
+  // We emit an order:created ticket and that updates the ticket. We have to refetch it
+  const updatedTicket = await Ticket.findById(ticket.id);
+
+  expect(updatedTicket!.orderId).toEqual(data.id);
+});
