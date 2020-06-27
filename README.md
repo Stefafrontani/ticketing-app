@@ -1457,3 +1457,53 @@ if only 4 increase version, then:
 
 The changes in delte and new were done by me, not the tuto. These was done because common module updated all events (including order created and updated) so we should add the version number when those events are emmited too.
 They will be updated correctly in the following videos.
+
+### [Optional] Versioning Without Update-If-Current
+
+What the library does, is to increased the version number of the document every time .save() is called and the doc is saved inside the DB. This ca n be done because all of our services used a sequential versioning control system - 1,2,3,4,5. In some parallel universe, we could have a service from the oustide world that has a DB that versions its documents like 100, 200, 300. In this scenario we could not be able to use this lbirary mongoose-update-if-current because it only increase version in 1. Other services could emit version through a timestamp, not even a number!
+
+The two things this library does are:
+
+- updates the version number on records before they are saved.
+  Implementation:
+
+```
+// ticket-updated-listener.ts
+From
+    const { title, price } = data;
+    ticket.set({
+      title,
+      price,
+    });
+
+    await ticket.save();
+To:
+    const { title, price, version } = data;
+    ticket.set({
+      title,
+      price,
+      version,
+    });
+
+    await ticket.save();
+```
+
+That data would be sent from another service and could have a version in format timestamp. So we then are saving the document directly with that same version/timestamp
+
+- Customizes the find-and-update operation (save) to look for the correct version.
+
+```
+// ./orders/models/tickets.ts
+From:
+   ticketSchema.plugin(updateIfCurrentPlugin);
+To:
+   ticketSchema.pre('save', function (done) {
+      // @ts-ignore
+      this.$where = {
+         version: this.get('version') - 1 // Not only finde the record with the id for example, but also with the version - 1
+      };
+
+      done();
+   })
+
+```
