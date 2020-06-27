@@ -4,6 +4,7 @@ import { TicketUpdatedListener } from "../ticket-updated-listener";
 import { natsWrapper } from "../../../nats-wrapper";
 import { Ticket } from "../../../models/tickets";
 import { TicketUpdatedEvent } from "@sfticketing/common";
+import { deleteOrderRouter } from "../../../routes/delete";
 
 const setup = async () => {
   // Create an instance of the listener
@@ -54,4 +55,15 @@ it("acks the message", async () => {
   await listener.onMessage(data, msg);
 
   expect(msg.ack).toHaveBeenCalled();
+});
+
+it("does not call ack if the event has a skipped version nuber", async () => {
+  const { msg, data, listener, ticket } = await setup();
+
+  data.version = 10;
+
+  try {
+    await listener.onMessage(data, msg);
+  } catch (err) {}
+  expect(msg.ack).not.toHaveBeenCalled();
 });
