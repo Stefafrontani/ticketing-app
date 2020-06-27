@@ -1500,7 +1500,7 @@ To:
    ticketSchema.pre('save', function (done) {
       // @ts-ignore
       this.$where = {
-         version: this.get('version') - 1 // Not only finde the record with the id for example, but also with the version - 1
+         version: this.get('version') - 1 // Not only finde the record with the id for example, but also with the version - 1 (or - 100)
       };
 
       done();
