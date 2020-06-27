@@ -1452,3 +1452,8 @@ if (3) increase version and (4) do the same:
 if only 4 increase version, then:
 <- comment:created { ..., version: 0 }
 <- comment:updated { ..., version: 1 } // Processed succesfuly
+
+### Applying a Version Query
+
+The changes in delte and new were done by me, not the tuto. These was done because common module updated all events (including order created and updated) so we should add the version number when those events are emmited too.
+They will be updated correctly in the following videos.

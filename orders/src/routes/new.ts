@@ -57,6 +57,7 @@ router.post(
     // Publish an event saying that an order was created
     new OrderCreatedPublisher(natsWrapper.client).publish({
       id: order.id,
+      version: 0, // To make it compile - Throwing error the orders service - Tuto does not touch this
       status: order.status,
       userId: order.userId,
       expiresAt: order.expiresAt.toISOString(), // Transform to UTC, not "datetime:location"
