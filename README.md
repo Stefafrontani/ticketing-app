@@ -1429,3 +1429,26 @@ Library to control versioning in the mongo db
 https://www.npmjs.com/package/mongoose-update-if-current
 
 When testing this used of the library in the app is not exactly the same of the concurrency issues we wrote down some lines above. In those tests we are making sure that when we are doing some updates to the same record and trying to save at the same time, we are gonna processed only one of them.
+
+### Who Updates Versions?
+
+We should only increment the 'version' number whenever the primary service responsible for a record emits an event to describe a create/update/destroy to a record.
+i.e.:
+Comments service
+-> Emit comment:created (1)
+<- Receives comment:moderated (4)
+
+Moderation Service
+<- Receives comment:created (2)
+-> Emits comment:moderated (3)
+
+Query Service
+(\*bc = badcase)
+if (3) increase version and (4) do the same:
+<- comment:created { ..., version: 0 }
+<- comment:updated { ..., version: 2 } // Processed unsuccesfuly
+
+(\*gc = goodcase)
+if only 4 increase version, then:
+<- comment:created { ..., version: 0 }
+<- comment:updated { ..., version: 1 } // Processed succesfuly
