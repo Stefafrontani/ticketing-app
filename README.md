@@ -1363,7 +1363,7 @@ These events emitted are:
 
 Update "updates - 8" inside common module with the new orders events created there - order:created and order:cancelled events. Should have been v 1.0.9 but by mistake pub 2 times and end up being v 1.0.10
 
-## Listening for Events and Handling Concurrency Issues (Section 13)
+## Listening for Events and Handling Concurrency Issues (Section 19)
 
 ### Time for listeners
 
