@@ -1427,3 +1427,5 @@ Mongoose sends an "update" request off to mongoDB --> Find the record with id "C
 
 Library to control versioning in the mongo db
 https://www.npmjs.com/package/mongoose-update-if-current
+
+When testing this used of the library in the app is not exactly the same of the concurrency issues we wrote down some lines above. In those tests we are making sure that when we are doing some updates to the same record and trying to save at the same time, we are gonna processed only one of them.
