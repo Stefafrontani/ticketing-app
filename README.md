@@ -1422,3 +1422,8 @@ Update the document
 Save the document
 `mongoose updates the 'version' field of the document automatically`
 Mongoose sends an "update" request off to mongoDB --> Find the record with id "CZQ" and `a version of 1 and` set its price to 10 --> Tickets DB: [{ ticketId: CZQ, price: 10, version: 1 }]
+
+### Mongoose update-if-current
+
+Library to control versioning in the mongo db
+https://www.npmjs.com/package/mongoose-update-if-current
