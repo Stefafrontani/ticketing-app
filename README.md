@@ -1544,3 +1544,16 @@ This, as described above, will have only 1 responsability:
   This includes:
   - Listening to the order:created to start a 15 minutes timer to eventually time out that order
   - Emmit an expiration:complete event to let order service know that an order has gone over the 15 minute time limit. It is up to the orders service to decide whether or not to cancel the order (it might have already been paid!)
+
+### Expiration Options
+
+1. Timeout:
+   Stores a timer in memory, so is not valid because if the service reststarts or go down, all timers are gone.
+2. nats redelivery mechanism:
+   Rely on this nats redelivery mecahnism every time order:Created arrives to the service, we ask if its time to expiration:complete, if no, we do not ack the message and nats will re deliver to us to make the process again till we ack the msg. Avoid: it will make difficult to track the redelivery ratio in some scenarios.
+3. Message broker - (event bus - not nats, not supported) - scheduled message/event
+   Broker waits 15 minutes to publish messsage. We tell the event bus to not to publish the message for another 15 minutes. This is called scheduled message/event
+4. Bull JS
+   Library for setting up long-term timers or giving us notifications
+   Reming us to do something 15 minutes from now.
+   Will use redis server to store list of jobs
