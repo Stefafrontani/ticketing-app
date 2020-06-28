@@ -1524,3 +1524,12 @@ Orders Service would then have an outdated version of this ticket.
 We should emit an event after we await ticket.save();
 
 It is also needed to give a property orderId to our TicketUpdatedEvent in order to emit the event with that data that was added.
+
+### Private vs Protected Properties
+
+As we mentioned, we have to emit an event of ticket updated once the ticket-updated-listener listens to the order:created or order:updated event. In the order-created-listener, after we save the ticket with the orderId property, we then have to emit that event of ticket:updated. This can be done in two ways:
+
+1. Import natsWrapper and use its natsWrapper.client() to the new OrderCreatedListener(/_here_/)
+   Not so cool. In testing files we are already importing these, would complicate thins up.
+   Besides, theres another better way.
+2. Instead of putting private client property, we can make it protected (this is all set inside the base-listener). This enables to get the client directly inside a subclass - the OrderCreatedListener subclass
