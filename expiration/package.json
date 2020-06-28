@@ -18,7 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@sfticketing/common": "^1.0.13",
+    "@sfticketing/common": "^1.0.14",
     "@types/bull": "^3.14.0",
     "bull": "^3.14.0",
     "ts-ignore": "0.0.3",
