@@ -15,7 +15,8 @@ import { natsWrapper } from "../nats-wrapper";
 
 const router = express.Router();
 
-const EXPIRATION_WINDOW_SECONDS = 15 * 60;
+// Mock 1 minute instead of 15 to test in terminal the message on process inside the expiration service
+const EXPIRATION_WINDOW_SECONDS = 1 * 60;
 
 router.post(
   "/api/orders",
