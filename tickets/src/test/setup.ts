@@ -34,6 +34,7 @@ beforeAll(async () => {
 
 // Remove all collections before each test
 beforeEach(async () => {
+  jest.clearAllMocks(); // Test was failing because mocks were not being cleared inside that file order-created-listener. When console.log(mock.calls), 3 elements were shown, 3 calls. Only 1 should be been
   const collections = await mongoose.connection.db.collections();
 
   for (let collection of collections) {
