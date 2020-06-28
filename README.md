@@ -1533,3 +1533,14 @@ As we mentioned, we have to emit an event of ticket updated once the ticket-upda
    Not so cool. In testing files we are already importing these, would complicate thins up.
    Besides, theres another better way.
 2. Instead of putting private client property, we can make it protected (this is all set inside the base-listener). This enables to get the client directly inside a subclass - the OrderCreatedListener subclass
+
+## Worker Services (Section 20)
+
+### The Expiration Service
+
+This, as described above, will have only 1 responsability:
+
+- Deal with the 15 minutes expiration time whenever an order is created.
+  This includes:
+  - Listening to the order:created to start a 15 minutes timer to eventually time out that order
+  - Emmit an expiration:complete event to let order service know that an order has gone over the 15 minute time limit. It is up to the orders service to decide whether or not to cancel the order (it might have already been paid!)
