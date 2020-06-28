@@ -1507,3 +1507,20 @@ To:
    })
 
 ```
+
+### Missing Update Event
+
+Wea re only updating the version when updating a ticket inside the tickets service, when the price is updated, or the title.
+But we have a listener inside that same service, the order-created-listener (and the order-updated-listener) that inside them are updateing the ticket and setting the orderId to whatever data.id is in there
+
+```
+   ticket.set({ orderId: data.id })
+   // After this line, we do a
+   await ticket.save();
+```
+
+We are updating the version inside the tickets service (done by the library mongoose-update-if-current) but not the other services that depend on this one.
+Orders Service would then have an outdated version of this ticket.
+We should emit an event after we await ticket.save();
+
+It is also needed to give a property orderId to our TicketUpdatedEvent in order to emit the event with that data that was added.
