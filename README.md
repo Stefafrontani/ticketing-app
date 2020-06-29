@@ -1557,3 +1557,15 @@ This, as described above, will have only 1 responsability:
    Library for setting up long-term timers or giving us notifications
    Reming us to do something 15 minutes from now.
    Will use redis server to store list of jobs
+
+### Listening for Expiration
+
+At this point we have this flow functioning - For testing purposes:
+
+- Go to postman
+- Make sure you are signing (make a request to signup if otherwise)
+- Post to api/tickets to create new ticket - grab the newly created ticket id
+- Create a new order for the ticket previously created
+- Wait 1 minute
+- After that minute, an event of type expiration:complete must be published
+- See that the order service listens that event
