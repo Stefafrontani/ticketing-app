@@ -7,6 +7,7 @@ import {
 import { Message } from "node-nats-streaming";
 import { queueGroupName } from "./queue-group-name";
 import { Order } from "../../models/orders";
+import { OrderCancelledPublisher } from "../publishers/order-cancelled-publisher";
 
 export class ExpirationCompleteListener extends Listener<
   ExpirationCompleteEvent
@@ -28,5 +29,14 @@ export class ExpirationCompleteListener extends Listener<
     });
 
     await order.save();
+    await new OrderCancelledPublisher(this.client).publish({
+      id: order.id,
+      version: order.version,
+      ticket: {
+        id: order.ticket.id,
+      },
+    });
+
+    msg.ack();
   }
 }
