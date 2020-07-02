@@ -1571,3 +1571,9 @@ At this point we have this flow functioning - For testing purposes:
 - Wait 1 minute
 - After that minute, an event of type expiration:complete must be published
 - See that the order service listens that event
+
+## Handling Payments (Section 21)
+
+### The Payment Service
+
+Write above the payments service emmiting services: look for charge:created
