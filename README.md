@@ -1577,3 +1577,21 @@ At this point we have this flow functioning - For testing purposes:
 ### The Payment Service
 
 Write above the payments service emmiting services: look for charge:created
+
+### Replicated Fields - Service events explanation
+
+Events listened:
+Needs to know all the orders created over time.
+Needs know what order the user is trying to pay for.
+Needs to evaluate that payment.
+
+For this, this service will store the orders, listening to order:created and order:cancelled events.
+It will save an order with these props:
+{  id: need to track the same ids in the orders service orders to track the same documents in both services
+   status: can not let to purchase a cancelled order
+   version: for concurrency
+   userId: check the same person that created the order is the same trying to pay for it
+   price: of the ticket
+}
+
+Events emitted:
