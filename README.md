@@ -1595,3 +1595,15 @@ It will save an order with these props:
 }
 
 Events emitted:
+
+### Payments Flow with Stripe
+
+We will use the library Stripe JS to handle credit card transactions.
+Steps:
+1. The StripeJS library sends to the Stripe API the credit card details
+2. Ths stripe API returns a token the the stripe js library
+3. The stripe js library makes that token enable in our code (web)
+4. Our js code (web) then communcicate trough a request, the token to the payments service
+5. The payment service talks to stripe api with the tocken to effectively purchase. Receives a charge
+
+For stripe, a charge is a payment.
