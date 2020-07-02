@@ -1391,14 +1391,16 @@ These events emitted are:
 
 1. charge:created.
    Will be listened by:
-   - TODO - complete
+   - orders service:
+      needs to know that an order has been paid for
 
 Expiration service
 These events emitted are:
 
 1. expiration:complete.
    Will be listened by:
-   - TODO - complete
+   - orders service:
+      needs to know that an order has been cancelled, expired.
 
 ### Optimistic Concurrency control
 
