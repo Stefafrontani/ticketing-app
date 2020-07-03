@@ -1607,3 +1607,14 @@ Steps:
 5. The payment service talks to stripe api with the tocken to effectively purchase. Receives a charge
 
 For stripe, a charge is a payment.
+
+### Implementing the Create Charge Handler
+
+Steps in the payments service:
+
+1. Receives a request : create a charge { token: string; orderId: string }
+2. Find order the user is trying to pay for
+3. Make sure the order belongs to that user
+4. Make sure the payment amount matches te amount due for the order
+5. Verify payment with stripe api
+6. Create charge record to record succesful payment
