@@ -1636,3 +1636,13 @@ kubectl create secret generic stripe-secret --from-literal STRIPE_KEY=sk_test_51
 
 // To see the secrete created
 $ kubectl get secrets
+
+### Manual Testing of Payments
+
+The process to manual testing with postman is:
+1. Sign up
+2. Create a ticket
+3. Create an order
+4. Request to post : /payments
+
+Every time we create a charge, we can go to the dashboard and check the carge added there. Theres a list of charges
