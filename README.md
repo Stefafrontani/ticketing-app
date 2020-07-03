@@ -1618,3 +1618,11 @@ Steps in the payments service:
 4. Make sure the payment amount matches te amount due for the order
 5. Verify payment with stripe api
 6. Create charge record to record succesful payment
+
+### Stripe setup
+
+The stripe library needs to know your secret key associated with your account, so:
+1. go to stripe.com
+2. Sign up
+3. Validate email
+4. enter developers -> api keys
