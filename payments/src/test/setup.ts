@@ -15,6 +15,9 @@ declare global {
 // This line will make jest to import the file with that same name inside te mock folder we created on this commit, instead of the file of the path itself
 jest.mock("../nats-wrapper");
 
+// Give access in here to the STRIPE_KEY (running test outside k8s where we have the secret)
+process.env.STRIPE_KEY = 'sk_test_51H0vjFJOyDKpgw80Iv58X0AHMt9TJxCN1HLlLr1EkqdmhgbzjE8RzSnMNmSZFzqFid5OcHVvlBIPp7YRK4dZSAof00Jgp6rOwv'
+
 // MongoMemoryServer
 // This will used to create an isntance of mongo db in memory to run multiple tests at the same time without these tests reaching out to the same instance of mongo
 let mongo: any;

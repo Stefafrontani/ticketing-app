@@ -1646,3 +1646,11 @@ The process to manual testing with postman is:
 4. Request to post : /payments
 
 Every time we create a charge, we can go to the dashboard and check the carge added there. Theres a list of charges
+
+### Realistic Test implementation
+
+We stop mocking __mocks__/stripe.ts (renamed to stripe.ts.old to leave what was like)
+We set process.env locally because we need to talk directly to the real stripe api and we need the STRPE_KEY
+We use the api get list method to retrieve a list with the carge created before
+
+Disadvantage: Takes so much time to run the test (5.xx seconds)
