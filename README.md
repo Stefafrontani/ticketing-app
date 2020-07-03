@@ -1619,10 +1619,20 @@ Steps in the payments service:
 5. Verify payment with stripe api
 6. Create charge record to record succesful payment
 
-### Stripe setup
+### Stripe Setup
 
 The stripe library needs to know your secret key associated with your account, so:
 1. go to stripe.com
 2. Sign up
 3. Validate email
 4. enter developers -> api keys
+
+### Creating a Stripe Secret
+
+// To create the secret
+kubectl create secret generic stripe-secret --from-literal STRIPE_KEY=sk_test_51H0vjFJOyDKpgw80Iv58X0AHMt9TJxCN1HLlLr1EkqdmhgbzjE8RzSnMNmSZFzqFid5OcHVvlBIPp7YRK4dZSAof00Jgp6rOwv
+
+(this `sk_test_51H0vjFJOyDKpgw80Iv58X0AHMt9TJxCN1HLlLr1EkqdmhgbzjE8RzSnMNmSZFzqFid5OcHVvlBIPp7YRK4dZSAof00Jgp6rOwv` comes from the stripe dashboard when logged in)
+
+// To see the secrete created
+$ kubectl get secrets
