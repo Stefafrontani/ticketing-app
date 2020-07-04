@@ -1743,3 +1743,6 @@ A little script, in which we write code to execute in certain moments:
 - Repository Forked
 
 The action is created under the Actions tab inside the repo. The syntax is yml
+
+We have to create this script because the npm run test keeps watching the files and will not be usefull in a CI run test command. It would just hangs in there
+$ npm run test:ci
