@@ -1,14 +1,14 @@
-import buildClient from "../api/build-client";
+// import buildClient from "../api/build-client";
 
 const LandingPage = ({ currentUser }) => {
   return currentUser ? (
     <h1> You are signed in </h1>
   ) : (
-    <h1>You are not signed in</h1>
-  );
+      <h1>You are not signed in</h1>
+    );
 };
 
-LandingPage.getInitialProps = async (context) => {
+LandingPage.getInitialProps = async (context, client, currentUser) => {
   // Comment the refactor because its important to understand the request we need to make, differing the server and the browser environments
   /*   if (typeof window === "undefined") {
     // We are on the server !!
@@ -33,11 +33,13 @@ LandingPage.getInitialProps = async (context) => {
     return data;
   } */
 
-  console.log("Landing page");
-  const client = buildClient(context);
-  const { data } = await client.get("/api/users/currentuser");
+  // Comment: We are making the request to current user here and in app component
+  // console.log("Landing page");
+  // const client = buildClient(context);
+  // const { data } = await client.get("/api/users/currentuser");
 
-  return data;
+  // return data;
+  return {};
 };
 
 export default LandingPage;
