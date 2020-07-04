@@ -1711,3 +1711,25 @@ Create this workflow
 8. Because master rbanch has changed, github build and deploys
 
 For this, we need to mantain a repo and configured it.
+
+### Git Repository Approaches
+
+One big repo VS Multiple repo, as many as services we have.
+
+Pros and cons, we will go with the mono-repo approach.
+Many companies use this approach because dealing with multiple repos is a pain in the ass - configure pipelines, permissions, ssh keys, ETC, ETC, ETC.
+
+1. In root dir run command - $ git init
+2. Create .gitignore in that same dir and write:
+   ```
+      node_modules
+   ```
+   NOT THIS:
+      */package-lock.json
+      client/.next/**
+
+3. Create repository on github
+4. Relate local repo with the repo on github:
+   git remote add origin git@github.com:stefafrontani/{nameOrRepo}.git
+
+Note: The master is adding the `common` code inside the big repo. Im not.
