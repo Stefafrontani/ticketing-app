@@ -3,6 +3,7 @@ import { body } from 'express-validator';
 import { requireAuth, validateRequest, BadRequestError, NotFoundError, NotAuthorizedError, OrderStatus } from '@sfticketing/common';
 import { stripe } from '../stripe';
 import { Order } from '../models/orders';
+import { Payment } from '../models/payments';
 
 const router = express.Router();
 
@@ -32,11 +33,16 @@ router.post('/api/payments',
       throw new BadRequestError('Cannot pay for a cancelled order');
     }
 
-    await stripe.charges.create({
+    const charge = await stripe.charges.create({
       currency: 'usd',
       amount: order.price * 100, // receives cents!
       source: token
-    })
+    });
+    const payment = Payment.build({
+      orderId: orderId,
+      stripeId: charge.id
+    });
+    await payment.save();
 
     res.status(201).send({ success: true })
   }
