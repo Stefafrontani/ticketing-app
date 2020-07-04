@@ -1693,3 +1693,21 @@ safety number: 123
 
 Once clicked pay, if that information is ok, we should receive a token inside the response:
 response = { id: tok_39284234oi23p4oi234fwief }
+
+## CI/CD (Section 23)
+
+Create this workflow
+
+// In local machine
+1. Make change to code for tickets service
+2. Commit code to a gir branch (any besides master, as it will be treated specially)
+3. Push branch to github
+
+// In github
+4. Github receives updated branch
+5. You manually create a PR to merge branch into master
+6. Githu automatically runs tests for project
+7. After tests pass, you merge the PR into master branch
+8. Because master rbanch has changed, github build and deploys
+
+For this, we need to mantain a repo and configured it.
