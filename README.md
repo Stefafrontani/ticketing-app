@@ -1389,7 +1389,7 @@ These events emitted are:
 Payments service
 These events emitted are:
 
-1. charge:created.
+1. charge:created. - Change value to payment:created (see that payment service has a model of payments, not charges)
    Will be listened by:
    - orders service:
       needs to know that an order has been paid for
