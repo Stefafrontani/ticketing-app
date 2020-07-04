@@ -1672,3 +1672,13 @@ Will be done inthis section
    /orders/:orderId   || /orders/[orderId].js   || Show info about an order + payment button
 
 Note that if we want to name a page dinamically (ticketId or orderId - show pages for example) we should write the name of the file between [].
+
+### Reminder on Data Fetching with Next
+
+Steps when navigating to a url and render by nextjs
+
+1. User navigates to /
+2. Next decides to show LandingPage component
+3. Next calls the app's getInitialProps function
+4. We manually invoke the LandingPage's getInitialProps function
+5. Next renders the App Component with data from getInitialProps + LandingPage component
