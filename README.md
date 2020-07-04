@@ -1750,3 +1750,12 @@ $ npm run test:ci
 ### Running Tests on PR Creation
 
 Comments on the commit
+### Selective Test Execution
+
+With these changes
+      ```
+         pull_request:
+            paths:
+               - '{serviceName}/**'
+      ```
+We are telling to run the test on every PR whenever is a change on that specific path
