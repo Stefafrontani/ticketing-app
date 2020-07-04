@@ -1746,3 +1746,13 @@ The action is created under the Actions tab inside the repo. The syntax is yml
 
 We have to create this script because the npm run test keeps watching the files and will not be usefull in a CI run test command. It would just hangs in there
 $ npm run test:ci
+
+### Selective Test Execution
+
+With these changes
+      ```
+         pull_request:
+            paths:
+               - '{serviceName}/**'
+      ```
+We are telling to run the test on every PR whenever is a change on that specific path
