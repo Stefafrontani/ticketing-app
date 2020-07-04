@@ -1654,3 +1654,21 @@ We set process.env locally because we need to talk directly to the real stripe a
 We use the api get list method to retrieve a list with the carge created before
 
 Disadvantage: Takes so much time to run the test (5.xx seconds)
+
+## Back to the Client (Section 22)
+
+### A few more pages - client side sum up:
+
+List of all pages:
+Until now:
+   /auth/signin  || /auth/signin.js  || Show sign in form
+   /auth/signup  || /auth/signup.js  || Show sign up form
+   /auth/signout || /auth/signout.js || Sign out
+   /             || /index.js        || Show list of all tickets
+
+Will be done inthis section
+   /tickets/new       || /tickets/new.js        || Form to create a new ticket
+   /tickets/:ticketId || /tickets/[ticketId].js || Details about a specific ticket
+   /orders/:orderId   || /orders/[orderId].js   || Show info about an order + payment button
+
+Note that if we want to name a page dinamically (ticketId or orderId - show pages for example) we should write the name of the file between [].
