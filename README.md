@@ -1733,3 +1733,13 @@ Many companies use this approach because dealing with multiple repos is a pain i
    git remote add origin git@github.com:stefafrontani/{nameOrRepo}.git
 
 Note: The master is adding the `common` code inside the big repo. Im not.
+
+### Creating a GitHub Action
+
+A little script, in which we write code to execute in certain moments:
+- Code Pushed
+- PR Created
+- PR Closed
+- Repository Forked
+
+The action is created under the Actions tab inside the repo. The syntax is yml
