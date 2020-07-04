@@ -1682,3 +1682,14 @@ Steps when navigating to a url and render by nextjs
 3. Next calls the app's getInitialProps function
 4. We manually invoke the LandingPage's getInitialProps function
 5. Next renders the App Component with data from getInitialProps + LandingPage component
+
+### Test Credit Card Numbers
+
+Go to stripe.com/docs/testing to know what type of numbers on the credit card to put
+One visa example:
+credit card number: 4242 4242 4242 4242
+mm/yy: 10/30
+safety number: 123
+
+Once clicked pay, if that information is ok, we should receive a token inside the response:
+response = { id: tok_39284234oi23p4oi234fwief }
