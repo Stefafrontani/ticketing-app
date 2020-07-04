@@ -29,7 +29,7 @@ const NewTicket = () => {
       return;
     }
 
-    setPrice(value);
+    setPrice(value.toFixed(2));
   };
 
   return (
