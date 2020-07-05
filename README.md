@@ -1934,3 +1934,14 @@ $ kubectl config use-context {digitalOceanContext}
 $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-0.32.0/deploy/static/provider/do/deplot.yaml
 
 Something like that the name.
+
+### Testing Automated Deployment
+
+After all the configuration done above, we should be able to:
+1. Create a change in auth directory
+2. Make it on another branch
+3. Push that branch
+4. Open the PR
+5. Merge that PR
+6. Go to actions and see the deploy-manifests - no action because no change made to infra directort
+7. Go to deploy-auth.yaml action file and it will be rebuilding the image push it to docker hub and deploys it into our cluster
