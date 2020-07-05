@@ -1923,3 +1923,14 @@ For STRIPE_KEY run:
 $ kubectl create secret generic stripe-secret --from-literal=STRIPE_KEY=thisShouldComeFromStripeDashboard
 
 (he does not get out from the test environment inside the stripe dashboard, he uses the same as testing)
+
+### Don't Forget Ingress-Nginx!
+
+Before using ingress-nginx inside our local cluster, we had to make a little configuration from the command line - command took from the documentation
+That command needs to be run agains our digital ocean cluster, not local! Check that context before
+// Check
+$ kubectl config view
+$ kubectl config use-context {digitalOceanContext}
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-0.32.0/deploy/static/provider/do/deplot.yaml
+
+Something like that the name.
