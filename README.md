@@ -1964,3 +1964,26 @@ Of course, we do not have all changes related to digital ocean:
 ```
 
 But they should have it and auth change for the service name
+
+### A Successful Deploy!
+
+At this point we should be able to run the same steps of ### Testing Automated Deployment in every directory - expiration, orders, client, tickets, payments
+
+The steps:
+
+1. Create a change in directory
+2. Make it on another branch
+3. Push that branch
+4. Open the PR
+5. Merge that PR
+6. Go to actions and see the deploy-manifests - no action because no change made to infra directory
+7. Go to actions -> all workflos and there should be a list of all the deploy-{service}.yaml files having run. They should have rebuilt the image, push it to docker hub and deploys it into our cluster
+8. Run $ kubectl get pods
+Of course check the context is digital ocean and the age is seconds (should have been rebuilt)
+
+If any pod is crashing, we could run:
+$ kubectl describe pod {podName}
+as well as
+$ kubectl logs {podName}
+
+These both are for troubleshooting purposes, specially the events section in the terminal
