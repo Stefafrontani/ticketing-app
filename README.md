@@ -1828,6 +1828,8 @@ Again: can not test it. We are not making it.
 
 ### Applying Kubernetes Manifests
 
+
+
 1. Go to workflows directory in github
 2. Create another file and call it deploy-manifests.yaml
 Copy this code inside:
@@ -1852,3 +1854,13 @@ Copy this code inside:
          - run: doctl kubernets cluster kubeconfig save {clusterName}
          - run: kubectl apply -f infra/k8s
 ```
+
+After this, commit the file
+
+Note on our ingress-nginx controller.
+
+The ingress-srv.yaml file is redirecting every request going to ticketing.dev
+This file was configured in such way that whenever a user goes to a host of ticketing.dev, we should apply some redirect rules.
+The problem is that when we go production we will have another domain purchased. So this - host: ticketing.dev should be different whether we run the our ingress srv in our local cluster or our production cluster.
+If i go to ticketing.dev on my local machine, it will go to our local cluster, not our production cluster
+
