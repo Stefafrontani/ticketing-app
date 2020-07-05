@@ -1945,3 +1945,22 @@ After all the configuration done above, we should be able to:
 5. Merge that PR
 6. Go to actions and see the deploy-manifests - no action because no change made to infra directort
 7. Go to deploy-auth.yaml action file and it will be rebuilding the image push it to docker hub and deploys it into our cluster
+
+### Additional Deploy Files
+
+After doing the above changes, we can go to our terminal and check that the pods are running (we are interested in that auth service) and we can run kubectl logs {authDeplName} to see those changes!
+
+We then need to create these deploy-serviceName-yaml file for every service
+
+Tickets - Payments - Expiration - Orders - Client
+
+Of course, we do not have all changes related to digital ocean:
+```
+   - uses: digitalocean/action-doctl@v2
+      with:
+         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+   - run: doctl kubernets cluster kubeconfig save {clusterName}
+   - run: kubectl rollout restart deployment auth-depl
+```
+
+But they should have it and auth change for the service name
