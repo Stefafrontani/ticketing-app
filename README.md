@@ -1825,3 +1825,30 @@ steps:
 ---- Tell that cluster to restart the auth depl
 
 Again: can not test it. We are not making it.
+
+### Applying Kubernetes Manifests
+
+1. Go to workflows directory in github
+2. Create another file and call it deploy-manifests.yaml
+Copy this code inside:
+```
+   name: deploy-manifests
+
+   on:
+   push:
+      branches:
+         - master
+      paths:
+         - 'infra/**'
+
+   jobs:
+   build:
+      runs-on: ubuntu-latest
+      steps:
+         - uses: actions/checkout@v2
+         - uses: digitalocean/action-doctl@v2
+            with:
+               token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+         - run: doctl kubernets cluster kubeconfig save {clusterName}
+         - run: kubectl apply -f infra/k8s
+```
