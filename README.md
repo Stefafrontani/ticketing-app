@@ -1987,3 +1987,24 @@ as well as
 $ kubectl logs {podName}
 
 These both are for troubleshooting purposes, specially the events section in the terminal
+
+### Buy a Domain Name
+
+Go to digital ocean dashboard
+On the left panel -> networking -> loadbalancer
+We have a load balancer that Was created automatically at the time we create a ingress-nginx inside of our cluster
+
+This load balancer is inside our digital OCEAN envrironment
+
+outside domainurl.com ----> inside DIGITAL OCEAN ENVIRONMENT
+
+DIGITAL OCEAN ENVIRONMENT
+   Load balancer ---> Our Cluster
+   Our cluster
+      node 1
+      node 2
+      node 3
+
+The load balancer has an external ip automatically assigned by digital ocean. But at this point, if you visit that ip in the browser, you will have a 404. That 404 is sent be nginx! This means that we are sending request to nginx, but as it has not been provided the rules to manage that request so thats why the 404. We should give a domain name
+
+An option to buy domain: `namecheap.com`
