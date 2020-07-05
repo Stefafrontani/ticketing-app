@@ -2039,3 +2039,59 @@ for
 - host: newDomainName
 
 Add changes, commit & push to master
+
+### One Small Fix
+
+Note on the course. Note that the full code must be added, it adds a service!
+
+There is currently a bug with ingress-nginx on Digital Ocean.  You can read more about this bug here: https://github.com/digitalocean/digitalocean-cloud-controller-manager/blob/master/docs/controllers/services/examples/README.md#accessing-pods-over-a-managed-load-balancer-from-inside-the-cluster
+
+To fix it, add the following to the bottom of your ingress-srv.yaml file.
+
+Also, update the URL on this line to the domain name you're using: service.beta.kubernetes.io/do-loadbalancer-hostname: 'www.ticketing-app-prod.xyz'
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: 'true'
+    service.beta.kubernetes.io/do-loadbalancer-hostname: 'www.ticketing-app-prod.xyz'
+  labels:
+    helm.sh/chart: ingress-nginx-2.0.3
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/version: 0.32.0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: controller
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: https
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/component: controller
+
+
+In addition, related to this bug, you also need to make an update to the client's 'build-client.js' file. Change the baseURL for the server client from:
+
+baseURL: 'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local'
+
+to:
+
+baseURL: 'Whatever_your_purchased_domain_is'
+
+So for me, I purchased ticketing-app-prod.xyz, so I would update this line to:
+
+baseURL: 'http://www.ticketing-app-prod.xyz/'
