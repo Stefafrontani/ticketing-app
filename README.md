@@ -2008,3 +2008,34 @@ DIGITAL OCEAN ENVIRONMENT
 The load balancer has an external ip automatically assigned by digital ocean. But at this point, if you visit that ip in the browser, you will have a 404. That 404 is sent be nginx! This means that we are sending request to nginx, but as it has not been provided the rules to manage that request so thats why the 404. We should give a domain name
 
 An option to buy domain: `namecheap.com`
+
+### Configuring the Domain Name
+
+Inside that namecheap dashboard you will have to:
+
+1. Change nameservers to Custom DNS
+-> ns1.digitalocean.com
+-> ns2.digitalocean.com
+-> ns3.digitalocean.com
+
+Inside digital ocean
+2. Inside networking in left panel Add domain purchased
+3. Create new recordThere are many records in tabs:
+A AAAA CNAME MX TXT NS SRV CAA
+
+In `A` record
+HOSTNAME: write `@`
+WILL DIRECT TO: select option: `load-balancer created` and mentioned above
+TTL: write/select `30 seconds`
+
+In `CNAME` record
+HOSTNAME: write `www`
+IS AN ALIAS OF: `@`
+TTL: write/select `30 seconds`
+
+Go to k8s-prod/ingres-srv.yaml and change
+- host: ticketing.dev
+for
+- host: newDomainName
+
+Add changes, commit & push to master
