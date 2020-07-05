@@ -1903,3 +1903,23 @@ with
 - run: doctl kubernetes cluster kubeconfig save ticketing
 - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod // Added this infra prod part
 ```
+### Manual Secret Creation
+
+We also have to add some secrets that our auth module needs: If you og to auth-depl.yaml, we see JWT_KEY and STRIPE_KEY that are being set by secrets in our local cluster, not the production. We have to create those secrets in the context of the production cluster.
+We create these cluster secrets with the command line
+change the context.
+Remember:
+Run this to see all different contexts
+$ kubectl config view
+
+Run this to set the context
+$ kubectl config use-context {nameDigitalOceanContext}
+
+Once in this context, create the secrets:
+For JWT_TOKEN run:
+$ kubectl create secret generic jwt-secret --from-literal=JWT_KEY=randomStringDoesNotMatterWhat
+
+For STRIPE_KEY run:
+$ kubectl create secret generic stripe-secret --from-literal=STRIPE_KEY=thisShouldComeFromStripeDashboard
+
+(he does not get out from the test environment inside the stripe dashboard, he uses the same as testing)
