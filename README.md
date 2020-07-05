@@ -1864,3 +1864,42 @@ This file was configured in such way that whenever a user goes to a host of tick
 The problem is that when we go production we will have another domain purchased. So this - host: ticketing.dev should be different whether we run the our ingress srv in our local cluster or our production cluster.
 If i go to ticketing.dev on my local machine, it will go to our local cluster, not our production cluster
 
+### Prod vs Dev Manifest Files
+
+For managing different environments, we will have this structure:
+infra
+--- k8s
+   --- ingress-srv.yaml DELETED
+------ k8s-dev
+   --- ingress-srv.yaml
+------ k8s-prod
+   --- ingress-srv.yaml
+
+Code:
+k8s-dev
+--- ingress-srv.yaml
+
+k8s-prod
+--- ingress-srv.yaml
+Update -host: ticketing.dev to whatever domain we purchase.
+
+Also, we need to tell skaffold to watch for this new dev directory
+infra
+--- k8s
+------ skaffold.yaml (change code)
+```
+deploy:
+   kubectl:
+      manifests:
+         - ./infra/k8s/*
+         - ./infra/k8s-dev/* ADD THIS
+```
+
+Also, in this section: ### Applying Kubernetes Manifests, when we created the deploy-manifests.yaml, we should add the k8s-dev directory to apply:
+
+```
+with
+   token....
+- run: doctl kubernetes cluster kubeconfig save ticketing
+- run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod // Added this infra prod part
+```
