@@ -1759,3 +1759,69 @@ With these changes
                - '{serviceName}/**'
       ```
 We are telling to run the test on every PR whenever is a change on that specific path
+
+### Restarting the deployment
+
+This line `- uses: digitalocean/action-doctl@v2` inside the auth-depl file inside github actions section is to install doctl insidethe github container.
+The same as actions/checkout@v2.
+
+For this we have to give the token to that doctl command use. We do not have (no account on DO -- credit card)
+
+The auth-depl.yaml file will end like this in this commit section:
+```
+   name: deploy-auth
+
+   on:
+   push:
+      branches:
+         - master
+      paths:
+         - 'auth/**'
+
+   jobs:
+   build:
+      runs-on: ubuntu-latest
+      steps:
+         - uses: actions/checkout@v2
+         - run: cd auth && docker build -t stefanofrontani/auth .
+         - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            env:
+               DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+               DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+         - run: docker push stefanofrontani/auth
+         - uses: digitalocean/action-doctl@v2
+            with:
+               token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+         - run: doctl kubernets cluster kubeconfig save {clusterName}
+         - run: kubectl rollout restart deployment auth-depl
+```
+
+That DIGITAL_OCEAN_TOKEN will be another one that will be created inside the DIGITAL OCEAN platform dashboard.
+Will be sec as another secret inside github container
+The env variable storing this token will be called:
+DIGITALOCEAN_ACCESS_TOKEN
+value: the value gave by digital ocean
+
+Summing up the steps:
+steps:
+- uses: actions/checkout@v2
+----
+- run: cd auth && docker build -t stefanofrontani/auth .
+---- build our image
+- run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  env:
+    DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+    DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+---- Login to docker
+- run: docker push stefanofrontani/auth
+---- Push image to docker
+- uses: digitalocean/action-doctl@v2
+   with:
+      token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+---- Authenticate and install doctl
+- run: doctl kubernets cluster kubeconfig save {clusterName}
+---- Give connection credentials to get our kubernetes cluster in digital ocean
+- run: kubectl rollout restart deployment auth-depl
+---- Tell that cluster to restart the auth depl
+
+Again: can not test it. We are not making it.
